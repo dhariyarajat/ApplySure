@@ -71,8 +71,8 @@ export default function EligibilityPage() {
       localStorage.setItem("manual_profile", JSON.stringify(studentProfile))
       localStorage.setItem("manual_results", JSON.stringify(results))
 
-      // Navigate to results
-      router.push("/manual-results")
+      // Navigate to dashboard
+      router.push("/dashboard")
     } catch (error) {
       console.error("Eligibility check error:", error)
     } finally {

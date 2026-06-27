@@ -256,7 +256,7 @@ export default function ManualEntryPage() {
 
     // Navigate to results page
     setTimeout(() => {
-      router.push("/manual-results")
+      router.push("/dashboard")
     }, 300)
   }
 

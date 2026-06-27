@@ -127,6 +127,7 @@ export default function DashboardPage() {
       try {
         const parsed: StoredAnalysis[] = JSON.parse(stored)
         setAnalyses(parsed)
+        setIsLoaded(true)
         return
       } catch {
         // If parsing fails, check for manual entry data
