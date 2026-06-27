@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { useSession } from "next-auth/react"
+
 import {
   User, FileText, Loader2, LogOut, ArrowRight, GraduationCap, Sparkles
 } from "lucide-react"
@@ -13,37 +13,22 @@ import type { StudentProfile } from "@/lib/scholarship/types"
 
 export default function EligibilityPage() {
   const router = useRouter()
-  const { data: session, status } = useSession()
   const [profile, setProfile] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isCheckingMyEligibility, setIsCheckingMyEligibility] = useState(false)
 
   useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/auth/signin")
-      return
-    }
+  const savedProfile = localStorage.getItem("user_profile")
 
-    if (status === "authenticated" && session?.user?.id) {
-      // Load the user's profile from the database
-      fetch(`/api/profile?userId=${session.user.id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.profile) {
-            setProfile(data.profile)
-          } else {
-            // No profile yet — redirect to profile setup
-            router.push("/profile-setup")
-          }
-        })
-        .catch(() => {
-          router.push("/profile-setup")
-        })
-        .finally(() => setIsLoading(false))
-    }
-  }, [status, session, router])
+  if (savedProfile) {
+    setProfile(JSON.parse(savedProfile))
+  } else {
+    router.push("/profile-setup")
+  }
 
-  if (status === "loading" || isLoading) {
+  setIsLoading(false)
+}, [router])
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-violet-50/50 via-white to-indigo-50/50 dark:from-violet-950/20 dark:via-background dark:to-indigo-950/20 flex items-center justify-center">
         <div className="text-center animate-fade-in">
@@ -112,11 +97,7 @@ export default function EligibilityPage() {
           <p className="mt-4 text-lg text-foreground/70 max-w-2xl mx-auto">
             Choose how you'd like to check your eligibility for scholarships
           </p>
-          {session?.user && (
-            <p className="mt-2 text-sm text-foreground/60">
-              Signed in as <span className="font-medium">{session.user.email}</span>
-            </p>
-          )}
+         
         </div>
 
         {/* Two Option Cards */}
