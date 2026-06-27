@@ -3,7 +3,7 @@
 import { useState, useCallback, useRef } from "react"
 import { useRouter } from "next/navigation"
 import {
-  Upload, FileText, CheckCircle2, AlertCircle, ArrowRight, Trash2, RefreshCw, Scan, Shield, Brain, Loader2, Image as ImageIcon
+  Upload, FileText, CheckCircle2, AlertCircle, ArrowRight, Trash2, RefreshCw, Scan, Shield, Brain, Loader2
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"

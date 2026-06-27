@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 
 import {
-  User, FileText, Loader2, LogOut, ArrowRight, GraduationCap, Sparkles
+  User, FileText, Loader2, ArrowRight, GraduationCap, Sparkles
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -18,16 +18,16 @@ export default function EligibilityPage() {
   const [isCheckingMyEligibility, setIsCheckingMyEligibility] = useState(false)
 
   useEffect(() => {
-  const savedProfile = localStorage.getItem("user_profile")
+    const savedProfile = localStorage.getItem("user_profile")
 
-  if (savedProfile) {
-    setProfile(JSON.parse(savedProfile))
-  } else {
-    router.push("/profile-setup")
-  }
+    if (savedProfile) {
+      setProfile(JSON.parse(savedProfile))
+    } else {
+      router.push("/profile-setup")
+    }
 
-  setIsLoading(false)
-}, [router])
+    setIsLoading(false)
+  }, [router])
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-violet-50/50 via-white to-indigo-50/50 dark:from-violet-950/20 dark:via-background dark:to-indigo-950/20 flex items-center justify-center">

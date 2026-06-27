@@ -68,13 +68,12 @@ export function ImagePreview({ file, analysisResult, onRemove, className }: Imag
 
   return (
     <div className={cn("space-y-3 animate-slide-up", className)}>
-      {/* Preview Controls */}
-      <div className="flex items-center justify-between">
+      {/* Preview Controls */}                  <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-sm">
           <span className="font-medium">
   {file && "name" in file ? file.name : "Uploaded image"}
 </span>
-          <span className="text-muted-foreground">({file && "name" in file ? file.name : "Uploaded image"})</span>
+          <span className="text-muted-foreground">({file && "size" in file ? formatFileSize(file.size) : ""})</span>
           {dimensions.width > 0 && (
             <span className="text-muted-foreground hidden sm:inline">
               {dimensions.width}×{dimensions.height}

@@ -217,15 +217,20 @@ export default function DashboardPage() {
   }, [analyses])
 
   // ── Compute eligibility insights ──────────────────────────────────
-  const eligibilityInsights: EligibilityInsights | null = matchingResults && studentProfile
-    ? generateInsights(
+  const eligibilityInsights: EligibilityInsights | null = useMemo(() => {
+    if (!matchingResults || !studentProfile) return null
+    try {
+      return generateInsights(
         [...matchingResults.eligibleScholarships, ...matchingResults.partiallyEligible, ...matchingResults.notEligible]
           .map((m) => ({
             scholarship: m.scholarship,
             breakdown: generateBreakdown(studentProfile, m.scholarship),
           }))
       )
-    : null
+    } catch {
+      return null
+    }
+  }, [matchingResults, studentProfile])
 
   const verifiedCount = analyses.filter((a) => a.result.classification.isValidDocument).length
   const totalIssues = analyses.reduce((acc, a) => {
@@ -312,11 +317,15 @@ export default function DashboardPage() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="h-9 gap-2">
+              <Button variant="outline" size="sm" className="h-9 gap-2" onClick={() => window.print()}>
                 <Download className="h-4 w-4" />
                 Download Report
               </Button>
-              <Button variant="outline" size="sm" className="h-9 gap-2">
+              <Button variant="outline" size="sm" className="h-9 gap-2" onClick={() => {
+                if (navigator.share) {
+                  navigator.share({ title: 'ApplySure Application', url: window.location.href }).catch(() => {})
+                }
+              }}>
                 <Share2 className="h-4 w-4" />
                 Share
               </Button>
@@ -603,7 +612,7 @@ export default function DashboardPage() {
                     </div>
                   </div>
 
-                  <Button className="w-full gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 shadow-lg">
+                  <Button className="w-full gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 shadow-lg" onClick={() => window.print()}>
                     <Mail className="h-4 w-4" />
                     Submit Application
                   </Button>
@@ -902,7 +911,7 @@ export default function DashboardPage() {
                       AI-generated comprehensive report for Application #{appId}
                     </CardDescription>
                   </div>
-                  <Button variant="outline" size="sm" className="gap-2">
+                  <Button variant="outline" size="sm" className="gap-2" onClick={() => window.print()}>
                     <Download className="h-4 w-4" />
                     Download Full Report
                   </Button>

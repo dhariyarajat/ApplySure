@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import {
   Brain, Scan, FileText, CheckCircle2, AlertCircle, ArrowRight, Sparkles, Shield, Zap, Loader2, XCircle
@@ -74,6 +74,7 @@ export default function ProcessingPage() {
   const [isComplete, setIsComplete] = useState(false)
   const [showParticles, setShowParticles] = useState(false)
   const [hasErrors, setHasErrors] = useState(false)
+  const completionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     // Load analysis results from localStorage (persists across refreshes)
@@ -109,7 +110,7 @@ export default function ProcessingPage() {
         if (prev >= 100) {
           clearInterval(progressTimer)
           clearInterval(stepTimer)
-          setTimeout(() => {
+          completionTimeoutRef.current = setTimeout(() => {
             setIsComplete(true)
             setShowParticles(true)
           }, 500)
@@ -122,6 +123,9 @@ export default function ProcessingPage() {
     return () => {
       clearInterval(stepTimer)
       clearInterval(progressTimer)
+      if (completionTimeoutRef.current) {
+        clearTimeout(completionTimeoutRef.current)
+      }
     }
   }, [isComplete, analyses.length])
 
