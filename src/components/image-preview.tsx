@@ -71,8 +71,10 @@ export function ImagePreview({ file, analysisResult, onRemove, className }: Imag
       {/* Preview Controls */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-sm">
-          <span className="font-medium">{file.name}</span>
-          <span className="text-muted-foreground">({formatFileSize(file.size)})</span>
+          <span className="font-medium">
+  {file && "name" in file ? file.name : "Uploaded image"}
+</span>
+          <span className="text-muted-foreground">({file && "name" in file ? file.name : "Uploaded image"})</span>
           {dimensions.width > 0 && (
             <span className="text-muted-foreground hidden sm:inline">
               {dimensions.width}×{dimensions.height}
@@ -165,7 +167,7 @@ export function ImagePreview({ file, analysisResult, onRemove, className }: Imag
             <img
               ref={imgRef}
               src={imageUrl}
-              alt={file.name}
+              alt={file && "name" in file ? file.name : "Uploaded image"}
               className="max-h-full max-w-full object-contain"
               onLoad={handleImageLoad}
               onError={(e) => {

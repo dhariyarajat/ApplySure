@@ -268,7 +268,7 @@ export function extractDocumentData(input: ExtractionInput): ExtractedData {
   for (const key of ["name", "fatherName", "dob", "income", "category", "marks", "bankAccount", "ifsc"] as const) {
     const field = extractedFields[key]
     if (field && !shouldAcceptField(field.confidence)) {
-      ;(data as Record<string, unknown>)[key] = null
+      ;(data as unknown as Record<string, unknown>)[key] = null
     }
   }
 

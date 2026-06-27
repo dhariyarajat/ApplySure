@@ -36,7 +36,7 @@ export function validateExtractedData(input: ValidationInput): ValidationResult[
   const requiredFields = DOCUMENT_REQUIRED_FIELDS[documentType] ?? []
 
   for (const field of requiredFields) {
-    const value = (extractedData as Record<string, unknown>)[field]
+    const value = (extractedData as unknown as Record<string, unknown>)[field]
     const extractedField = extractedData.extractedFields[field]
 
     if (!value || value === null) {
