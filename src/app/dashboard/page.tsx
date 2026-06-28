@@ -119,7 +119,7 @@ export default function DashboardPage() {
     }
   }
 
-  // ── Load analysis data from storage ──────────
+  // ── Load analysis data AND compute scholarships synchronously ──
   const loadData = useCallback(() => {
     // Load from localStorage (persists across tab refreshes), fall back to sessionStorage
     const stored = localStorage.getItem("applysure_analyses") || sessionStorage.getItem("applysure_analyses")
@@ -127,6 +127,22 @@ export default function DashboardPage() {
       try {
         const parsed: StoredAnalysis[] = JSON.parse(stored)
         setAnalyses(parsed)
+        // Compute scholarships synchronously so matchingResults is set in the SAME render
+        const profile = buildStudentProfile(parsed)
+        if (profile) {
+          try {
+            const results = matchScholarships(profile)
+            setMatchingResults(results)
+            setStudentProfile(profile)
+          } catch (error) {
+            console.error("[Dashboard] Scholarship matching error:", error)
+            setMatchingResults(null)
+            setStudentProfile(null)
+          }
+        } else {
+          setMatchingResults(null)
+          setStudentProfile(null)
+        }
         setIsLoaded(true)
         return
       } catch {
@@ -167,7 +183,7 @@ export default function DashboardPage() {
       }
     }
     setIsLoaded(true)
-  }, [setIsLoaded])
+  }, [])
 
   // Load data on mount
   useEffect(() => {
@@ -192,29 +208,6 @@ export default function DashboardPage() {
       window.removeEventListener("focus", handleFocus)
     }
   }, [loadData])
-
-  // ── Run scholarship matching when analyses data changes ──────────
-  useEffect(() => {
-    if (analyses.length === 0) {
-      setMatchingResults(null)
-      setStudentProfile(null)
-      return
-    }
-    try {
-      const profile = buildStudentProfile(analyses)
-      if (profile) {
-        const results = matchScholarships(profile)
-        setMatchingResults(results)
-        setStudentProfile(profile)
-      }
-    } catch (error) {
-      console.error("[Dashboard] Scholarship matching error:", error)
-      setMatchingResults(null)
-      setStudentProfile(null)
-    }
-    // Note: Student state is not yet extracted from documents.
-    // State-specific scholarships may not match until state extraction is added.
-  }, [analyses])
 
   // ── Compute eligibility insights ──────────────────────────────────
   const eligibilityInsights: EligibilityInsights | null = useMemo(() => {
