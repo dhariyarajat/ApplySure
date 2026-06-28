@@ -16,9 +16,12 @@ import { GoogleGenerativeAI, type GenerativeModel } from "@google/generative-ai"
 
 // ─── Constants ────────────────────────────────────────────────────
 
-const MAX_RETRIES = 2
+const MAX_RETRIES = 3
 const INITIAL_RETRY_DELAY_MS = 1000
 const REQUEST_TIMEOUT_MS = 55_000 // Slightly under Vercel's 60s limit
+
+// ─── Global request counter for observability ─────────────────────
+export const geminiRequestCount = { value: 0 }
 
 /** Error types that should trigger a retry */
 function isRetryableError(error: unknown): boolean {
@@ -41,15 +44,27 @@ function isRetryableError(error: unknown): boolean {
       message.includes("econnreset") ||
       message.includes("econnrefused") ||
       message.includes("socket") ||
-      message.includes("abort")
+      message.includes("abort") ||
+      message.includes("too many requests")
     )
   }
   return false
 }
 
-/** Wait for a given duration (ms) */
+/** Wait for a given duration (ms) with optional jitter (±25%) */
 function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms))
+  // Add jitter: random ±25% to prevent thundering herd
+  const jitter = ms * (0.75 + Math.random() * 0.5)
+  return new Promise((resolve) => setTimeout(resolve, Math.round(jitter)))
+}
+
+/** Extract structured error info for rate-limit/429 errors */
+export function isRateLimitError(error: unknown): boolean {
+  if (error instanceof Error) {
+    const msg = error.message.toLowerCase()
+    return msg.includes("429") || msg.includes("rate limit") || msg.includes("rate_limit") || msg.includes("too many requests") || msg.includes("quota")
+  }
+  return false
 }
 
 // ─── Types ─────────────────────────────────────────────────────────
@@ -214,6 +229,10 @@ export async function analyzeDocument(
     // ── Log: Gemini request payload (metadata, not full base64) ──
     logInfo(`Gemini request: model=${MODEL_NAME}, imageBase64Length=${base64Data.length}, mimeType=${mimeType}`)
 
+    // ── Increment request counter ───────────────────────────────
+    geminiRequestCount.value++
+    logInfo(`Gemini request #${geminiRequestCount.value}: file=${fileName}`)
+
     // ── Execute with retry logic ────────────────────────────────
     const rawText = await executeWithRetry(async () => {
       // Use Promise.race to implement timeout without relying on SDK signal support
@@ -295,8 +314,11 @@ export async function analyzeDocument(
       extraction.ifsc = null
     }
 
-    // ── Validation Layer ────────────────────────────────────────
-    // Rule: If marksheet and all fields are null → extraction_failed
+    // ── Extraction Quality Guidance (NOT rejection) ────────────────
+    // Note: Extraction fields being null does NOT invalidate the document.
+    // The document type was already validated by buildClassification above.
+    // Null extraction simply means the text couldn't be read clearly.
+    // This is logged for observability but the document remains valid.
     if (extraction.documentType === "marksheet") {
       const marksheetFields = [
         extraction.name,
@@ -305,22 +327,10 @@ export async function analyzeDocument(
       ]
       const allNull = marksheetFields.every((f) => f === null)
       if (allNull) {
-        logValidationResult("marksheet", false, { reason: "extraction_failed", detail: "All marksheet fields are null" })
-        return {
-          classification: {
-            isValidDocument: false,
-            documentType: "marksheet",
-            confidence: 0,
-            reason: "extraction_failed",
-          },
-          extraction,
-          rawResponse: rawText,
-          processingTimeMs: Date.now() - startTime,
-        }
+        logInfo(`Marksheet extraction returned no fields — keeping document valid with null extraction`)
       }
     }
 
-    // Rule: If caste_certificate and all fields are null → extraction_failed
     if (extraction.documentType === "caste_certificate") {
       const casteFields = [
         extraction.name,
@@ -329,18 +339,7 @@ export async function analyzeDocument(
       ]
       const allNull = casteFields.every((f) => f === null)
       if (allNull) {
-        logValidationResult("caste_certificate", false, { reason: "extraction_failed", detail: "All caste certificate fields are null" })
-        return {
-          classification: {
-            isValidDocument: false,
-            documentType: "caste_certificate",
-            confidence: 0,
-            reason: "extraction_failed",
-          },
-          extraction,
-          rawResponse: rawText,
-          processingTimeMs: Date.now() - startTime,
-        }
+        logInfo(`Caste certificate extraction returned no fields — keeping document valid with null extraction`)
       }
     }
 

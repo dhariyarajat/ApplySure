@@ -137,9 +137,39 @@ export default function UploadPage() {
           analyzedAt: new Date(),
         },
       }))
+      // Show rate-limit errors with a friendly message instead of "rejected"
+      if (!result.classification.isValidDocument && result.errors.length > 0) {
+        const errMsg = result.errors[0].toLowerCase()
+        if (errMsg.includes("busy") || errMsg.includes("rate limit") || errMsg.includes("429") || errMsg.includes("too many requests")) {
+          setFileErrors((prev) => ({ ...prev, [docId]: "Our AI service is temporarily busy. Please wait 30 seconds and try again." }))
+          setTimeout(() => setFileErrors((prev) => {
+            const next = { ...prev }
+            delete next[docId]
+            return next
+          }), 8000)
+          setDocState(docId, "idle")
+          return
+        }
+      }
       setDocState(docId, result.classification.isValidDocument ? "success" : "rejected")
     } catch (error) {
       console.error("Document analysis failed:", error)
+      const errMsg = error instanceof Error ? error.message.toLowerCase() : ""
+      if (errMsg.includes("busy") || errMsg.includes("rate limit") || errMsg.includes("429") || errMsg.includes("too many requests")) {
+        setFileErrors((prev) => ({ ...prev, [docId]: "Our AI service is temporarily busy. Please wait 30 seconds and try again." }))
+        setTimeout(() => setFileErrors((prev) => {
+          const next = { ...prev }
+          delete next[docId]
+          return next
+        }), 8000)
+      } else {
+        setFileErrors((prev) => ({ ...prev, [docId]: "Analysis failed. Please try again." }))
+        setTimeout(() => setFileErrors((prev) => {
+          const next = { ...prev }
+          delete next[docId]
+          return next
+        }), 4000)
+      }
       setDocState(docId, "idle")
     }
   }, [])

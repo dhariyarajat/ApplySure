@@ -132,6 +132,9 @@ export default function ProcessingPage() {
   useEffect(() => {
     setSteps((prev) =>
       prev.map((step, index) => {
+        if (isComplete) {
+          return { ...step, status: "complete" as const }
+        }
         if (index < currentStep) {
           return { ...step, status: "complete" as const }
         }
@@ -141,7 +144,7 @@ export default function ProcessingPage() {
         return { ...step, status: "pending" as const }
       })
     )
-  }, [currentStep])
+  }, [currentStep, isComplete])
 
   const averageConfidence = analyses.length > 0
     ? Math.round(analyses.reduce((acc, a) => acc + a.result.overallConfidence, 0) / analyses.length)

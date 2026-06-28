@@ -54,6 +54,78 @@ interface GeminiApiResponse {
   error?: string
 }
 
+// ─── In-Memory Request Cache ─────────────────────────────────────
+// Caches analysis results by file content hash to prevent duplicate
+// Gemini API calls when the same file is re-uploaded.
+interface CacheEntry {
+  result: DocumentAnalysisResult
+  fileId: string
+  documentId: string
+  timestamp: number
+}
+
+const analysisCache = new Map<string, CacheEntry>()
+const CACHE_TTL_MS = 30 * 60 * 1000 // 30 minutes
+
+/**
+ * Compute a lightweight file hash using the first/last 4KB + size.
+ * Fast enough to run on upload without blocking the UI.
+ */
+async function computeFileHash(file: File): Promise<string> {
+  const size = file.size
+  const chunkSize = 4096
+  const chunks: Uint8Array[] = []
+
+  // Read first 4KB
+  const headBlob = file.slice(0, chunkSize)
+  chunks.push(new Uint8Array(await headBlob.arrayBuffer()))
+
+  // Read last 4KB if file is larger
+  if (size > chunkSize) {
+    const tailBlob = file.slice(Math.max(0, size - chunkSize), size)
+    chunks.push(new Uint8Array(await tailBlob.arrayBuffer()))
+  }
+
+  // Simple hash: XOR all bytes together into a hex string
+  let hash = 0
+  for (const chunk of chunks) {
+    for (let i = 0; i < chunk.length; i++) {
+      hash = ((hash << 5) - hash + chunk[i]) | 0
+    }
+  }
+  return `${size}_${Math.abs(hash).toString(16)}`
+}
+
+/** Check cache for existing analysis, returns cached entry or null */
+async function checkCache(
+  file: File,
+  documentId: string,
+): Promise<{ hash: string; cached: CacheEntry | null }> {
+  const hash = await computeFileHash(file)
+  const cached = analysisCache.get(hash)
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS && cached.documentId === documentId) {
+    console.log(`[Cache] HIT for file hash ${hash} — reusing previous analysis`)
+    return { hash, cached }
+  }
+  console.log(`[Cache] MISS for file hash ${hash} — will call Gemini`)
+  return { hash, cached: null }
+}
+
+/** Store analysis result in cache */
+function storeCache(
+  hash: string,
+  result: DocumentAnalysisResult,
+  fileId: string,
+  documentId: string,
+): void {
+  // Evict oldest entry if cache exceeds 50 entries
+  if (analysisCache.size >= 50) {
+    const oldest = analysisCache.entries().next().value
+    if (oldest) analysisCache.delete(oldest[0])
+  }
+  analysisCache.set(hash, { result, fileId, documentId, timestamp: Date.now() })
+}
+
 // ─── API Client ───────────────────────────────────────────────────
 
 async function callAnalyzeApi(imageFile: File): Promise<GeminiApiResponse> {
@@ -68,10 +140,22 @@ async function callAnalyzeApi(imageFile: File): Promise<GeminiApiResponse> {
   const json: GeminiApiResponse = await response.json()
 
   if (!response.ok || !json.success) {
+    // Detect rate-limit errors for friendly messaging
+    if (response.status === 429 || response.status === 503) {
+      throw new RateLimitError(json.error || "API rate limit reached. Please wait a moment before uploading again.")
+    }
     throw new Error(json.error || `Analysis API returned ${response.status}`)
   }
 
   return json
+}
+
+/** Custom error class to distinguish rate-limit from other API errors */
+export class RateLimitError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = "RateLimitError"
+  }
 }
 
 function buildExtractedFields(extraction: GeminiApiExtraction): Record<string, ExtractedField> {
@@ -135,6 +219,13 @@ export async function analyzeDocument(
       }
     }
 
+    // ── Check cache for duplicate file ────────────────────────────
+    const { hash, cached } = await checkCache(imageFile, imageFile.name)
+    if (cached) {
+      console.log(`[Cache] Returning cached result for ${imageFile.name} (hash=${hash})`)
+      return cached.result
+    }
+
     // Stage 1: Send to Gemini for classification + extraction
     onProgress?.({ stage: "classifying", progress: 10, message: "Sending document to Gemini Vision AI..." })
 
@@ -154,7 +245,7 @@ export async function analyzeDocument(
     }
 
     if (!classification.isValidDocument) {
-      return {
+      const result: DocumentAnalysisResult = {
         classification,
         extraction: null,
         validations: [{
@@ -167,6 +258,8 @@ export async function analyzeDocument(
         processingTimeMs: Date.now() - startTime,
         errors: [classification.reason],
       }
+      storeCache(hash, result, `cache-${Date.now()}`, imageFile.name)
+      return result
     }
 
     // Stage 2: Build extracted data directly from Gemini response
@@ -204,7 +297,7 @@ export async function analyzeDocument(
 
     onProgress?.({ stage: "complete", progress: 100, message: "Analysis complete!" })
 
-    return {
+    const result: DocumentAnalysisResult = {
       classification,
       extraction,
       validations,
@@ -212,16 +305,29 @@ export async function analyzeDocument(
       processingTimeMs: Date.now() - startTime,
       errors,
     }
+
+    // ── Cache the result ─────────────────────────────────────────
+    storeCache(hash, result, `cache-${Date.now()}`, imageFile.name)
+
+    return result
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error during document analysis"
     errors.push(errorMessage)
     console.error("[analyzeDocument] Error:", errorMessage)
 
+    // Provide friendly message for rate-limit vs other errors
+    let reason = "Processing error occurred"
+    if (error instanceof RateLimitError) {
+      reason = "Our AI service is temporarily busy. Please wait 30 seconds and try uploading again."
+    } else if (errorMessage.includes("timed out") || errorMessage.includes("timeout")) {
+      reason = "Request timed out. The file may be too large or the AI service is slow. Please try again."
+    }
+
     return {
       classification: {
         isValidDocument: false,
         documentType: "unknown",
-        reason: "Processing error occurred",
+        reason,
         confidence: 0,
       },
       extraction: null,
