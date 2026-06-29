@@ -266,23 +266,23 @@ export default function ManualEntryPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-50/50 via-white to-indigo-50/50 dark:from-violet-950/20 dark:via-background dark:to-indigo-950/20">
-      <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-4xl px-4 py-6 sm:py-8 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-8 animate-fade-in">
+        <div className="mb-6 sm:mb-8 animate-fade-in">
           <button
             onClick={() => router.push("/upload")}
-            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-4"
+            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-3 sm:mb-4"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to options
           </button>
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 shadow-lg shadow-indigo-500/25">
-              <FileText className="h-6 w-6 text-white" />
+            <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 shadow-lg shadow-indigo-500/25 shrink-0">
+              <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
             </div>
-            <div>
-              <h1 className="text-3xl font-bold tracking-tight">Fill Details Manually</h1>
-              <p className="text-muted-foreground mt-1">
+            <div className="min-w-0">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Fill Details Manually</h1>
+              <p className="text-sm sm:text-base text-muted-foreground mt-0.5 sm:mt-1">
                 Enter your academic and personal details to check scholarship eligibility
               </p>
             </div>
@@ -290,15 +290,15 @@ export default function ManualEntryPage() {
         </div>
 
         {/* Progress bar */}
-        <div className="mb-8 animate-slide-up">
+        <div className="mb-6 sm:mb-8 animate-slide-up">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium">Form Completion</span>
-            <span className="text-sm text-muted-foreground">{filledFields} of {totalFields} fields</span>
+            <span className="text-xs sm:text-sm text-muted-foreground">{filledFields} of {totalFields} fields</span>
           </div>
-          <Progress value={completionPercent} className="h-2 [&>div]:bg-gradient-to-r [&>div]:from-violet-500 [&>div]:to-indigo-500" />
+          <Progress value={completionPercent} className="h-1.5 sm:h-2 [&>div]:bg-gradient-to-r [&>div]:from-violet-500 [&>div]:to-indigo-500" />
         </div>
 
-        <div className="space-y-8">
+        <div className="space-y-6 sm:space-y-8">
           {SECTIONS.map((section: SectionConfig, sectionIndex: number) => (
             <Card key={section.title} className="animate-slide-up overflow-hidden" style={{ animationDelay: `${sectionIndex * 0.1}s` }}>
               <CardHeader className="pb-4 border-b bg-gradient-to-r from-violet-50/50 to-indigo-50/50 dark:from-violet-950/20 dark:to-indigo-950/20">
@@ -315,8 +315,8 @@ export default function ManualEntryPage() {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent className="pt-6">
-                <div className="grid gap-5 sm:grid-cols-2">
+              <CardContent className="pt-4 sm:pt-6">
+                <div className="grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2">
                   {section.fields.map((field: FieldConfig) => {
                     const value = form[field.key]
                     const error = errors[field.key]
@@ -324,7 +324,7 @@ export default function ManualEntryPage() {
 
                     return (
                       <div key={field.key} className={cn(field.type === "select" && field.options && field.options.length > 10 ? "sm:col-span-2" : "")}>
-                        <label className="block text-sm font-medium mb-1.5">
+                        <label className="block text-xs sm:text-sm font-medium mb-1 sm:mb-1.5">
                           {field.label}
                           {isOptional && <span className="text-muted-foreground font-normal ml-1">(optional)</span>}
                           {!isOptional && <span className="text-red-500 ml-0.5">*</span>}
@@ -335,13 +335,14 @@ export default function ManualEntryPage() {
                             value={value as string}
                             onChange={(e) => updateField(field.key, e.target.value as never)}
                             className={cn(
-                              "flex h-10 w-full rounded-lg border bg-background px-3 py-2 text-sm ring-offset-background transition-colors",
+                              "flex h-10 w-full rounded-lg border bg-background px-3 py-2 text-xs sm:text-sm ring-offset-background transition-colors",
                               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                               "disabled:cursor-not-allowed disabled:opacity-50",
                               error ? "border-red-500" : "border-input hover:border-violet-300"
                             )}
                           >
-                            <option value="">Select {field.label.toLowerCase()}...</option>                              {field.options.map((opt: { value: string; label: string }) => (
+                            <option value="">Select {field.label.toLowerCase()}...</option>
+                            {field.options.map((opt: { value: string; label: string }) => (
                               <option key={opt.value} value={opt.value}>{opt.label}</option>
                             ))}
                           </select>
@@ -352,7 +353,7 @@ export default function ManualEntryPage() {
                             onChange={(e) => updateField(field.key, e.target.value as never)}
                             placeholder={field.placeholder}
                             className={cn(
-                              "flex h-10 w-full rounded-lg border bg-background px-3 py-2 text-sm ring-offset-background transition-colors",
+                              "flex h-10 w-full rounded-lg border bg-background px-3 py-2 text-xs sm:text-sm ring-offset-background transition-colors",
                               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                               "disabled:cursor-not-allowed disabled:opacity-50",
                               error ? "border-red-500" : "border-input hover:border-violet-300"
@@ -361,7 +362,7 @@ export default function ManualEntryPage() {
                         )}
 
                         {error && (
-                          <p className="mt-1 text-xs text-red-500 flex items-center gap-1">
+                          <p className="mt-1 text-[11px] sm:text-xs text-red-500 flex items-center gap-1">
                             <AlertCircle className="h-3 w-3" />
                             {error}
                           </p>
@@ -376,7 +377,7 @@ export default function ManualEntryPage() {
         </div>
 
         {/* Action buttons */}
-        <div className="mt-8 space-y-4 animate-slide-up">
+        <div className="mt-6 sm:mt-8 space-y-3 sm:space-y-4 animate-slide-up">
           {Object.keys(errors).length > 0 && (
             <Card className="border-amber-200 dark:border-amber-800 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20">
               <CardContent className="p-4">
@@ -399,11 +400,11 @@ export default function ManualEntryPage() {
             </Card>
           )}
 
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
             <Button
               variant="outline"
               size="lg"
-              className="h-12 px-6"
+              className="h-12 px-6 w-full sm:w-auto"
               onClick={() => router.push("/upload")}
             >
               <ArrowLeft className="h-5 w-5 mr-2" />
@@ -411,7 +412,7 @@ export default function ManualEntryPage() {
             </Button>
             <Button
               size="lg"
-              className="h-12 px-8 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 shadow-lg shadow-indigo-500/25 transition-all text-base flex-1 sm:flex-none"
+              className="h-12 px-6 sm:px-8 w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 shadow-lg shadow-indigo-500/25 transition-all text-base"
               onClick={handleSubmit}
               disabled={isSubmitting}
             >

@@ -11,9 +11,7 @@ export default function LandingPage() {
       <section className="relative overflow-hidden">
         {/* Background Gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-white to-indigo-50 dark:from-violet-950 dark:via-background dark:to-indigo-950" />
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiM5OTk5OTkiIGZpbGwtb3BhY2l0eT0iMC4wNCI+PHBhdGggZD0iTTM2IDE4YzEuNjU3IDAgMy0xLjM0MyAzLTNzLTEuMzQzLTMtMy0zLTMgMS4zNDMtMyAzIDEuMzQzIDMgMyAzem0wIDM2YzEuNjU3IDAgMy0xLjM0MyAzLTNzLTEuMzQzLTMtMy0zLTMgMS4zNDMtMyAzIDEuMzQzIDMgMyAzem0tMTgtMThjMS42NTcgMCAzLTEuMzQzIDMtM3MtMS4zNDMtMy0zLTMtMyAxLjM0My0zIDMgMS4zNDMgMyAzIDN6bTM2IDBjMS42NTcgMCAzLTEuMzQzIDMtM3MtMS4zNDMtMy0zLTMtMyAxLjM0My0zIDMgMS4zNDMgMyAzIDN6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-40" />
-
-        <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-16 sm:px-6 sm:pb-28 sm:pt-24 lg:px-8 lg:pb-36 lg:pt-32">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiM5OTk5OTkiIGZpbGwtb3BhY2l0eT0iMC4wNCI+PHBhdGggZD0iTTM2IDE4YzEuNjU3IDAgMy0xLjM0MyAzLTNzLTEuMzQzLTMtMy0zLTMgMS4zNDMtMyAzIDEuMzQzIDMgMyAzem0wIDM2YzEuNjU3IDAgMy0xLjM0MyAzLTNzLTEuMzQzLTMtMy0zLTMgMS4zNDMtMyAzIDEuMzQzIDMgMyAzem0tMTgtMThjMS42NTcgMCAzLTEuMzQzIDMtM3MtMS4zNDMtMy0zLTMtMyAxLjM0My0zIDMgMS4zNDMgMyAzIDN6bTM2IDBjMS42NTcgMCAzLTEuMzQzIDMtM3MtMS4zNDMtMy0zLTMtMyAxLjM0My0zIDMgMS4zNDMgMyAzIDN6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-40" />              <div className="relative mx-auto max-w-7xl px-4 pb-14 pt-12 sm:px-6 sm:pb-28 sm:pt-24 lg:px-8 lg:pb-36 lg:pt-32">
           <div className="mx-auto max-w-4xl text-center">
             {/* Badge */}
             <div className="animate-fade-in mb-8 inline-flex items-center gap-2 rounded-full border bg-white/50 dark:bg-white/10 px-4 py-1.5 text-sm shadow-sm backdrop-blur-sm">
@@ -22,22 +20,22 @@ export default function LandingPage() {
             </div>
 
             {/* Headline */}
-            <h1 className="animate-slide-up text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
+            <h1 className="animate-slide-up text-3xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
               Your Scholarship
-              <br />
+              <br className="hidden sm:block" />
               <span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
                 Applied with Confidence
               </span>
             </h1>
 
             {/* Subtitle */}
-            <p className="animate-slide-up stagger-2 mx-auto mt-6 max-w-2xl text-lg text-foreground/70 sm:text-xl">
+            <p className="animate-slide-up stagger-2 mx-auto mt-4 sm:mt-6 max-w-2xl text-base sm:text-lg text-foreground/70 sm:text-xl">
               ApplySure AI helps you organize, verify, and submit scholarship documents with AI-powered precision. 
               No more missing papers. No more last-minute panic.
             </p>
 
             {/* CTA Buttons */}
-            <div className="animate-slide-up stagger-3 mt-10 flex items-center justify-center gap-4">
+            <div className="animate-slide-up stagger-3 mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
               <Link href="/upload">
                 <Button size="lg" className="h-12 px-8 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 shadow-lg shadow-violet-500/25 hover:shadow-xl hover:shadow-violet-500/30 transition-all duration-300 text-base gap-2">
                   <Upload className="h-5 w-5" />
@@ -54,18 +52,18 @@ export default function LandingPage() {
             </div>
 
             {/* Stats */}
-            <div className="animate-slide-up stagger-4 mt-16 grid grid-cols-3 gap-8 border-y py-8">
+            <div className="animate-slide-up stagger-4 mt-12 sm:mt-16 grid grid-cols-3 gap-4 sm:gap-8 border-y py-6 sm:py-8">
               <div>
-                <div className="text-3xl font-bold text-violet-600 dark:text-violet-400">10K+</div>
-                <div className="text-sm text-foreground/60 mt-1">Applications Processed</div>
+                <div className="text-2xl sm:text-3xl font-bold text-violet-600 dark:text-violet-400">10K+</div>
+                <div className="text-xs sm:text-sm text-foreground/60 mt-1">Applications Processed</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-violet-600 dark:text-violet-400">98%</div>
-                <div className="text-sm text-foreground/60 mt-1">Approval Rate</div>
+                <div className="text-2xl sm:text-3xl font-bold text-violet-600 dark:text-violet-400">98%</div>
+                <div className="text-xs sm:text-sm text-foreground/60 mt-1">Approval Rate</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-violet-600 dark:text-violet-400">5 min</div>
-                <div className="text-sm text-foreground/60 mt-1">Average Upload Time</div>
+                <div className="text-2xl sm:text-3xl font-bold text-violet-600 dark:text-violet-400">5 min</div>
+                <div className="text-xs sm:text-sm text-foreground/60 mt-1">Average Upload Time</div>
               </div>
             </div>
           </div>
@@ -73,21 +71,21 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section className="border-t bg-muted/30 py-20">
+      <section className="border-t bg-muted/30 py-12 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight sm:text-4xl">
               Everything you need for a{" "}
               <span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
                 successful application
               </span>
             </h2>
-            <p className="mt-4 text-foreground/60 text-lg">
+            <p className="mt-4 text-foreground/60 text-base sm:text-lg">
               From document upload to AI verification, we've got you covered.
             </p>
           </div>
 
-          <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 sm:mt-16 grid gap-4 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {[
               {
                 icon: Upload,
@@ -142,21 +140,21 @@ export default function LandingPage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-20">
+      <section className="py-12 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight sm:text-4xl">
               How it{" "}
               <span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
                 works
               </span>
             </h2>
-            <p className="mt-4 text-foreground/60 text-lg">
+            <p className="mt-4 text-foreground/60 text-base sm:text-lg">
               Three simple steps to a complete scholarship application.
             </p>
           </div>
 
-          <div className="mt-16 grid gap-8 md:grid-cols-3">
+          <div className="mt-10 sm:mt-16 grid gap-6 sm:gap-8 grid-cols-1 md:grid-cols-3">
             {[
               { step: "01", title: "Upload Documents", description: "Upload all required scholarship documents. Our smart system automatically organizes them into a package.", icon: Upload },
               { step: "02", title: "AI Processing", description: "Our AI verifies each document for completeness, clarity, and authenticity. Get instant feedback.", icon: Brain },
@@ -178,9 +176,9 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="border-t bg-gradient-to-br from-violet-600 to-indigo-600 py-20">
+      <section className="border-t bg-gradient-to-br from-violet-600 to-indigo-600 py-14 sm:py-20">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white sm:text-4xl">
             Ready to simplify your scholarship application?
           </h2>
           <p className="mt-4 text-lg text-violet-100">

@@ -74,6 +74,7 @@ export default function ProcessingPage() {
   const [isComplete, setIsComplete] = useState(false)
   const [showParticles, setShowParticles] = useState(false)
   const [hasErrors, setHasErrors] = useState(false)
+  const [particles, setParticles] = useState<Array<{ left: string; top: string; duration: string; delay: string }>>([])
   const completionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
@@ -113,6 +114,15 @@ export default function ProcessingPage() {
           completionTimeoutRef.current = setTimeout(() => {
             setIsComplete(true)
             setShowParticles(true)
+            // Generate stable particle positions after mount to avoid hydration mismatch
+            setParticles(
+              Array.from({ length: 30 }).map(() => ({
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                duration: `${2 + Math.random() * 3}s`,
+                delay: `${Math.random() * 2}s`,
+              }))
+            )
           }, 500)
           return 100
         }
@@ -160,17 +170,17 @@ export default function ProcessingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-50/50 via-white to-indigo-50/50 dark:from-violet-950/20 dark:via-background dark:to-indigo-950/20">
       {/* Success Particles */}
-      {showParticles && !hasErrors && (
+      {showParticles && !hasErrors && particles.length > 0 && (
         <div className="fixed inset-0 pointer-events-none z-50">
-          {Array.from({ length: 30 }).map((_, i) => (
+          {particles.map((p, i) => (
             <div
               key={i}
               className="absolute h-2 w-2 rounded-full bg-gradient-to-r from-violet-500 to-indigo-500"
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animation: `float ${2 + Math.random() * 3}s ease-in-out infinite`,
-                animationDelay: `${Math.random() * 2}s`,
+                left: p.left,
+                top: p.top,
+                animation: `float ${p.duration} ease-in-out infinite`,
+                animationDelay: p.delay,
                 opacity: 0.6,
               }}
             />
@@ -178,12 +188,12 @@ export default function ProcessingPage() {
         </div>
       )}
 
-      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-3xl px-4 py-8 sm:py-12 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-10 animate-fade-in">
+        <div className="text-center mb-8 sm:mb-10 animate-fade-in">
           <div
             className={cn(
-              "inline-flex rounded-2xl bg-gradient-to-br p-4 shadow-xl mb-6",
+              "inline-flex rounded-2xl bg-gradient-to-br p-3 sm:p-4 shadow-xl mb-4 sm:mb-6",
               isComplete && !hasErrors
                 ? "from-emerald-600 to-teal-600 shadow-emerald-500/25"
                 : isComplete && hasErrors
@@ -199,14 +209,14 @@ export default function ProcessingPage() {
               <Brain className="h-10 w-10 text-white animate-pulse" />
             )}
           </div>
-          <h1 className="text-3xl font-bold tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
             {isComplete && !hasErrors
               ? "Processing Complete!"
               : isComplete && hasErrors
               ? "Processing Completed with Issues"
               : "AI Processing Your Documents"}
           </h1>
-          <p className="text-muted-foreground mt-2">
+          <p className="text-sm sm:text-base text-muted-foreground mt-2">
             {isComplete
               ? hasErrors
                 ? "Some documents require attention. Review the issues below."
@@ -329,7 +339,7 @@ export default function ProcessingPage() {
 
         {/* Analysis Results Summary */}
         {isComplete && analyses.length > 0 && (
-          <div className="mt-8 space-y-6 animate-slide-up">
+          <div className="mt-6 sm:mt-8 space-y-4 sm:space-y-6 animate-slide-up">
             {/* Results Summary */}
             <Card
               className={cn(
@@ -338,24 +348,23 @@ export default function ProcessingPage() {
                   : "border-emerald-200 dark:border-emerald-800"
               )}
             >
-              <CardHeader className="pb-4">
+              <CardHeader className="pb-3 sm:pb-4">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle className="text-lg">Analysis Results</CardTitle>
-                    <CardDescription>
+                  <div className="min-w-0">
+                    <CardTitle className="text-base sm:text-lg">Analysis Results</CardTitle>
+                    <CardDescription className="text-xs sm:text-sm">
                       AI verification results for {analyses.length} document{analyses.length !== 1 ? "s" : ""}
                     </CardDescription>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="text-right">
-                      <div className="text-2xl font-bold text-violet-600 dark:text-violet-400">{averageConfidence}%</div>
-                      <div className="text-xs text-foreground/60">avg. confidence</div>
+                  <div className="flex items-center gap-3">                      <div className="text-right shrink-0">
+                      <div className="text-xl sm:text-2xl font-bold text-violet-600 dark:text-violet-400">{averageConfidence}%</div>
+                      <div className="text-[10px] sm:text-xs text-foreground/60">avg. confidence</div>
                     </div>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="grid gap-4 sm:grid-cols-3 mb-6">
+                <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-3 mb-4 sm:mb-6">
                   <div className="rounded-lg bg-emerald-50 dark:bg-emerald-950/20 p-4 text-center">
                     <CheckCircle2 className="h-6 w-6 text-emerald-500 mx-auto mb-1" />
                     <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{verifiedCount}</div>
@@ -382,7 +391,7 @@ export default function ProcessingPage() {
                       <div
                         key={analysis.fileId}
                         className={cn(
-                          "flex items-start gap-4 rounded-lg border p-4",
+                          "flex items-start gap-3 sm:gap-4 rounded-lg border p-3 sm:p-4",
                           isValid
                             ? "border-emerald-200 dark:border-emerald-800"
                             : "border-red-200 dark:border-red-800"
@@ -390,7 +399,7 @@ export default function ProcessingPage() {
                       >
                         <div
                           className={cn(
-                            "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg",
+                            "flex h-8 w-8 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-lg",
                             isValid
                               ? "bg-emerald-100 dark:bg-emerald-900/40"
                               : "bg-red-100 dark:bg-red-900/40"
@@ -457,19 +466,19 @@ export default function ProcessingPage() {
             <div className="text-center">
               {hasErrors ? (
                 <Card className="border-amber-200 dark:border-amber-800 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20">
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-center gap-3 mb-4">
-                      <AlertCircle className="h-8 w-8 text-amber-500" />
-                      <div className="text-left">
-                        <h3 className="font-semibold text-lg text-amber-800 dark:text-amber-300">
+                  <CardContent className="p-4 sm:p-6">
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-4">
+                      <AlertCircle className="h-6 w-6 sm:h-8 sm:w-8 text-amber-500 shrink-0" />
+                      <div className="text-center sm:text-left">
+                        <h3 className="font-semibold text-base sm:text-lg text-amber-800 dark:text-amber-300">
                           Some Documents Need Attention
                         </h3>
-                        <p className="text-sm text-amber-600 dark:text-amber-400">
+                        <p className="text-xs sm:text-sm text-amber-600 dark:text-amber-400">
                           Please replace rejected documents and try again.
                         </p>
                       </div>
                     </div>
-                    <div className="flex gap-3 justify-center">
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center">
                       <Button
                         variant="outline"
                         size="lg"
@@ -491,14 +500,14 @@ export default function ProcessingPage() {
                 </Card>
               ) : (
                 <Card className="border-emerald-200 dark:border-emerald-800 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/20 dark:to-teal-950/20">
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-center gap-3 mb-4">
-                      <CheckCircle2 className="h-8 w-8 text-emerald-500" />
-                      <div className="text-left">
-                        <h3 className="font-semibold text-lg text-emerald-800 dark:text-emerald-300">
+                  <CardContent className="p-4 sm:p-6">
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-4">
+                      <CheckCircle2 className="h-6 w-6 sm:h-8 sm:w-8 text-emerald-500 shrink-0" />
+                      <div className="text-center sm:text-left">
+                        <h3 className="font-semibold text-base sm:text-lg text-emerald-800 dark:text-emerald-300">
                           Verification Complete
                         </h3>
-                        <p className="text-sm text-emerald-600 dark:text-emerald-400">
+                        <p className="text-xs sm:text-sm text-emerald-600 dark:text-emerald-400">
                           All documents verified. View your comprehensive report.
                         </p>
                       </div>

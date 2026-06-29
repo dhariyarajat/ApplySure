@@ -118,7 +118,7 @@ export function DocumentClassificationResult({ result, isLoading }: DocumentClas
                 <Shield className="h-4 w-4 text-violet-500" />
                 Extracted Information
               </h4>
-              <div className="grid gap-2 sm:grid-cols-2">
+              <div className="grid gap-2 grid-cols-1 sm:grid-cols-2">
                 {renderField("Full Name", extraction.name, extraction.extractedFields["name"]?.confidence)}
                 {renderField("Father's Name", extraction.fatherName, extraction.extractedFields["fatherName"]?.confidence)}
                 {renderField("Date of Birth", extraction.dob, extraction.extractedFields["dob"]?.confidence)}
@@ -142,7 +142,7 @@ export function DocumentClassificationResult({ result, isLoading }: DocumentClas
                 <Brain className="h-4 w-4 text-violet-500" />
                 Validation Results
               </CardTitle>
-              <div className="flex items-center gap-2 text-xs">
+              <div className="flex items-center gap-2 text-[11px] sm:text-xs">
                 <span className="text-emerald-600 dark:text-emerald-400">{validations.filter((v) => v.status === "present").length} passed</span>
                 <span className="text-muted-foreground">/</span>
                 <span className="text-amber-600 dark:text-amber-400">{validations.filter((v) => v.status !== "present").length} issues</span>

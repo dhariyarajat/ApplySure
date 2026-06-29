@@ -53,31 +53,31 @@ export default function ManualResultsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-50/50 via-white to-indigo-50/50 dark:from-violet-950/20 dark:via-background dark:to-indigo-950/20">
-      <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-4xl px-4 py-6 sm:py-8 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-8 animate-fade-in">
+        <div className="mb-6 sm:mb-8 animate-fade-in">
           <button
             onClick={() => router.push("/upload")}
-            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-4"
+            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-3 sm:mb-4"
           >
             <ArrowLeft className="h-4 w-4" />
             Start new application
           </button>
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-600 shadow-lg shadow-emerald-500/25">
-              <GraduationCap className="h-6 w-6 text-white" />
+            <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-600 shadow-lg shadow-emerald-500/25 shrink-0">
+              <GraduationCap className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
             </div>
-            <div>
-              <div className="flex items-center gap-3">
-                <h1 className="text-3xl font-bold tracking-tight">Your Scholarship Matches</h1>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Your Scholarship Matches</h1>
                 {totalMatches > 0 && (
-                  <span className="inline-flex items-center rounded-full bg-emerald-100 px-3 py-1 text-xs font-medium text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
-                    <Sparkles className="h-3 w-3 mr-1" />
+                  <span className="inline-flex items-center rounded-full bg-emerald-100 px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400 shrink-0">
+                    <Sparkles className="h-2.5 w-2.5 sm:h-3 sm:w-3 mr-1" />
                     {totalMatches} matches
                   </span>
                 )}
               </div>
-              <p className="text-muted-foreground mt-1">
+              <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1">
                 Based on your profile, here are the scholarships you may be eligible for
               </p>
             </div>
@@ -85,7 +85,7 @@ export default function ManualResultsPage() {
         </div>
 
         {/* Student Profile Summary */}
-        <Card className="mb-8 animate-slide-up">
+        <Card className="mb-6 sm:mb-8 animate-slide-up">
           <CardHeader className="pb-3">
             <div className="flex items-center gap-2">
               <Award className="h-4 w-4 text-violet-600 dark:text-violet-400" />
@@ -139,26 +139,26 @@ export default function ManualResultsPage() {
         </Card>
 
         {/* Summary Cards */}
-        <div className="grid gap-4 sm:grid-cols-3 mb-8 animate-slide-up">
+        <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-3 mb-6 sm:mb-8 animate-slide-up">
           <Card className="bg-gradient-to-br from-violet-50 to-indigo-50 dark:from-violet-950/20 dark:to-indigo-950/20 border-violet-200/50">
-            <CardContent className="p-6 text-center">
-              <TrendingUp className="h-8 w-8 text-violet-500 mx-auto mb-2" />
-              <div className="text-3xl font-bold text-violet-600 dark:text-violet-400">{totalMatches}</div>
-              <div className="text-xs text-foreground/60 mt-1">Total Matches Found</div>
+            <CardContent className="p-4 sm:p-6 text-center">
+              <TrendingUp className="h-6 w-6 sm:h-8 sm:w-8 text-violet-500 mx-auto mb-1 sm:mb-2" />
+              <div className="text-2xl sm:text-3xl font-bold text-violet-600 dark:text-violet-400">{totalMatches}</div>
+              <div className="text-[10px] sm:text-xs text-foreground/60 mt-0.5 sm:mt-1">Total Matches Found</div>
             </CardContent>
           </Card>
           <Card className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/20 dark:to-teal-950/20 border-emerald-200/50">
-            <CardContent className="p-6 text-center">
-              <CheckCircle2 className="h-8 w-8 text-emerald-500 mx-auto mb-2" />
-              <div className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">{results.eligibleScholarships.length}</div>
-              <div className="text-xs text-foreground/60 mt-1">Highly Eligible (≥80%)</div>
+            <CardContent className="p-4 sm:p-6 text-center">
+              <CheckCircle2 className="h-6 w-6 sm:h-8 sm:w-8 text-emerald-500 mx-auto mb-1 sm:mb-2" />
+              <div className="text-2xl sm:text-3xl font-bold text-emerald-600 dark:text-emerald-400">{results.eligibleScholarships.length}</div>
+              <div className="text-[10px] sm:text-xs text-foreground/60 mt-0.5 sm:mt-1">Highly Eligible (≥80%)</div>
             </CardContent>
           </Card>
           <Card className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 border-amber-200/50">
-            <CardContent className="p-6 text-center">
-              <Users className="h-8 w-8 text-amber-500 mx-auto mb-2" />
-              <div className="text-3xl font-bold text-amber-600 dark:text-amber-400">{results.partiallyEligible.length}</div>
-              <div className="text-xs text-foreground/60 mt-1">Partially Eligible (50-79%)</div>
+            <CardContent className="p-4 sm:p-6 text-center">
+              <Users className="h-6 w-6 sm:h-8 sm:w-8 text-amber-500 mx-auto mb-1 sm:mb-2" />
+              <div className="text-2xl sm:text-3xl font-bold text-amber-600 dark:text-amber-400">{results.partiallyEligible.length}</div>
+              <div className="text-[10px] sm:text-xs text-foreground/60 mt-0.5 sm:mt-1">Partially Eligible (50-79%)</div>
             </CardContent>
           </Card>
         </div>
@@ -220,11 +220,11 @@ export default function ManualResultsPage() {
         )}
 
         {/* Action buttons */}
-        <div className="flex items-center gap-4 mt-8 animate-slide-up">
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 mt-6 sm:mt-8 animate-slide-up">
           <Button
             variant="outline"
             size="lg"
-            className="h-12 px-6"
+            className="h-12 px-6 w-full sm:w-auto"
             onClick={() => router.push("/manual-entry")}
           >
             <ArrowLeft className="h-5 w-5 mr-2" />
@@ -232,7 +232,7 @@ export default function ManualResultsPage() {
           </Button>
           <Button
             size="lg"
-            className="h-12 px-8 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 shadow-lg flex-1 sm:flex-none"
+            className="h-12 px-8 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 shadow-lg w-full sm:w-auto"
             onClick={() => router.push("/upload")}
           >
             <FileText className="h-5 w-5 mr-2" />

@@ -120,9 +120,9 @@ export function ConfidenceBreakdown({ result, className }: ConfidenceBreakdownPr
           </div>
         </div>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-3 sm:space-y-4">
         {/* Field-by-field confidence */}
-        <div className="space-y-2.5">
+        <div className="space-y-2 sm:space-y-2.5">
           {fieldEntries
             .sort(([, a], [, b]) => b.confidence - a.confidence)
             .map(([key, field]) => {
@@ -213,7 +213,7 @@ export function ConfidenceBreakdown({ result, className }: ConfidenceBreakdownPr
             <Info className="h-3 w-3" />
             Confidence Distribution
           </h4>
-          <div className="grid grid-cols-4 gap-2 text-center">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
             <div>
               <div className="text-lg font-bold text-emerald-600 dark:text-emerald-400">{excellent}</div>
               <div className="text-[10px] text-muted-foreground">Excellent (≥90)</div>

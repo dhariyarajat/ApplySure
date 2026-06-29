@@ -65,7 +65,7 @@ export default function DashboardPage() {
   const [analyses, setAnalyses] = useState<StoredAnalysis[]>([])
   const [matchingResults, setMatchingResults] = useState<MatchingResults | null>(null)
   const [isLoaded, setIsLoaded] = useState(false)
-  const [appId] = useState(generateAppId)
+  const [appId, setAppId] = useState("")
   const [studentProfile, setStudentProfile] = useState<StudentProfile | null>(null)
 
   // ── Build Student Profile from extracted document data ──────────
@@ -188,6 +188,7 @@ export default function DashboardPage() {
   // Load data on mount
   useEffect(() => {
     loadData()
+    setAppId(generateAppId())
   }, [loadData])
 
   // Auto-refresh when localStorage changes (e.g., new upload in another tab)
@@ -267,15 +268,15 @@ export default function DashboardPage() {
       <div className="min-h-screen bg-gradient-to-br from-violet-50/50 via-white to-indigo-50/50 dark:from-violet-950/20 dark:via-background dark:to-indigo-950/20">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <Card>
-            <CardContent className="p-12 text-center">
-              <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h2 className="text-xl font-semibold mb-2">No Analysis Data</h2>
-              <p className="text-muted-foreground mb-6">
+            <CardContent className="p-6 sm:p-12 text-center">
+              <FileText className="h-10 w-10 sm:h-12 sm:w-12 text-muted-foreground mx-auto mb-3 sm:mb-4" />
+              <h2 className="text-lg sm:text-xl font-semibold mb-2">No Analysis Data</h2>
+              <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6">
                 Upload and analyze documents first to see your results dashboard.
               </p>
               <Button
                 onClick={() => router.push("/upload")}
-                className="bg-gradient-to-r from-violet-600 to-indigo-600"
+                className="w-full sm:w-auto bg-gradient-to-r from-violet-600 to-indigo-600"
               >
                 Go to Upload
               </Button>
@@ -290,44 +291,46 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-gradient-to-br from-violet-50/50 via-white to-indigo-50/50 dark:from-violet-950/20 dark:via-background dark:to-indigo-950/20">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-8 animate-fade-in">
+        <div className="mb-6 sm:mb-8 animate-fade-in">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 shadow-lg shadow-violet-500/25">
-                <BarChart3 className="h-6 w-6 text-white" />
+              <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 shadow-lg shadow-violet-500/25 shrink-0">
+                <BarChart3 className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
               </div>
-              <div>
-                <div className="flex items-center gap-3">
-                  <h1 className="text-3xl font-bold tracking-tight">Results Dashboard</h1>
-                  <span className="inline-flex items-center rounded-full bg-emerald-100 px-3 py-1 text-xs font-medium text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
-                    <CheckCircle2 className="h-3 w-3 mr-1" />
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                  <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Results Dashboard</h1>
+                  <span className="inline-flex items-center rounded-full bg-emerald-100 px-2.5 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400 shrink-0">
+                    <CheckCircle2 className="h-2.5 w-2.5 sm:h-3 sm:w-3 mr-1" />
                     {verifiedCount === analyses.length ? "Complete" : `${verifiedCount}/${analyses.length} Verified`}
                   </span>
                 </div>
-                <p className="text-foreground/70 mt-1">
+                <p className="text-xs sm:text-sm text-foreground/70 mt-0.5 sm:mt-1">
                   Application #{appId} &middot; {analyses.length} document{analyses.length !== 1 ? "s" : ""} analyzed
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="h-9 gap-2" onClick={() => window.print()}>
-                <Download className="h-4 w-4" />
-                Download Report
+              <Button variant="outline" size="sm" className="h-8 sm:h-9 gap-1.5 sm:gap-2 text-xs sm:text-sm" onClick={() => window.print()}>
+                <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">Download Report</span>
+                <span className="sm:hidden">Report</span>
               </Button>
-              <Button variant="outline" size="sm" className="h-9 gap-2" onClick={() => {
+              <Button variant="outline" size="sm" className="h-8 sm:h-9 gap-1.5 sm:gap-2 text-xs sm:text-sm" onClick={() => {
                 if (navigator.share) {
                   navigator.share({ title: 'ApplySure Application', url: window.location.href }).catch(() => {})
                 }
               }}>
-                <Share2 className="h-4 w-4" />
-                Share
+                <Share2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">Share</span>
+                <span className="sm:hidden">Share</span>
               </Button>
             </div>
           </div>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+        {/* Stats Cards - single column on mobile */}
+        <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mb-6 sm:mb-8">
           {[
             { label: "Verification Score", value: `${averageConfidence}%`, icon: Brain, gradient: "from-violet-500 to-indigo-500", change: `${verifiedCount}/${analyses.length} passed` },
             { label: "Documents Verified", value: `${verifiedCount}/${analyses.length}`, icon: FileText, gradient: "from-emerald-500 to-teal-500", change: verifiedCount === analyses.length ? "All clear" : `${analyses.length - verifiedCount} need attention` },
@@ -335,19 +338,18 @@ export default function DashboardPage() {
             { label: "Processing Time", value: `${(totalProcessingTime / 1000).toFixed(1)}s`, icon: Clock, gradient: "from-cyan-500 to-sky-500", change: `${analyses.length} documents` },
           ].map((stat, index) => (
             <Card key={index} className="animate-slide-up overflow-hidden" style={{ animationDelay: `${index * 100}ms` }}>
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-sm text-card-foreground/70">{stat.label}</p>
-                    <p className="text-3xl font-bold mt-1">{stat.value}</p>
-                    <p className="text-xs text-card-foreground/60 mt-1">{stat.change}</p>
-                  </div>
-                  <div className={cn(
-                    "rounded-xl bg-gradient-to-br p-3 text-white shadow-lg",
-                    stat.gradient
-                  )}>
-                    <stat.icon className="h-5 w-5" />
-                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs sm:text-sm text-card-foreground/70 truncate">{stat.label}</p>
+                    <p className="text-2xl sm:text-3xl font-bold mt-1">{stat.value}</p>
+                    <p className="text-[10px] sm:text-xs text-card-foreground/60 mt-1 truncate">{stat.change}</p>
+                  </div>                      <div className={cn(
+                        "rounded-xl bg-gradient-to-br p-2 sm:p-3 text-white shadow-lg shrink-0",
+                        stat.gradient
+                      )}>
+                        <stat.icon className="h-4 w-4 sm:h-5 sm:w-5" />
+                      </div>
                 </div>
               </CardContent>
             </Card>
@@ -356,7 +358,7 @@ export default function DashboardPage() {
 
         {/* Scholarship Stats Cards */}
         {matchingResults && (
-          <div className="grid gap-4 sm:grid-cols-3 mb-8 animate-fade-in">
+          <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-3 mb-6 sm:mb-8 animate-fade-in">
             {[
               {
                 label: "Total Matches",
@@ -381,18 +383,18 @@ export default function DashboardPage() {
               },
             ].map((stat, index) => (
               <Card key={`scholar-${index}`} className="animate-slide-up overflow-hidden" style={{ animationDelay: `${index * 80}ms` }}>
-                <CardContent className="p-6">
+                <CardContent className="p-4 sm:p-6">
                   <div className="flex items-start justify-between">
-                    <div>
-                      <p className="text-sm text-card-foreground/70">{stat.label}</p>
-                      <p className="text-3xl font-bold mt-1">{stat.value}</p>
-                      <p className="text-xs text-card-foreground/60 mt-1">{stat.change}</p>
+                    <div className="min-w-0">
+                      <p className="text-xs sm:text-sm text-card-foreground/70 truncate">{stat.label}</p>
+                      <p className="text-2xl sm:text-3xl font-bold mt-1">{stat.value}</p>
+                      <p className="text-[10px] sm:text-xs text-card-foreground/60 mt-1 truncate">{stat.change}</p>
                     </div>
                     <div className={cn(
-                      "rounded-xl bg-gradient-to-br p-3 text-white shadow-lg",
+                      "rounded-xl bg-gradient-to-br p-2 sm:p-3 text-white shadow-lg shrink-0",
                       stat.gradient
                     )}>
-                      <stat.icon className="h-5 w-5" />
+                      <stat.icon className="h-4 w-4 sm:h-5 sm:w-5" />
                     </div>
                   </div>
                 </CardContent>
@@ -402,7 +404,7 @@ export default function DashboardPage() {
         )}
 
         {/* Tabs */}
-        <div className="flex gap-1 mb-6 rounded-lg border bg-muted/50 p-1 overflow-x-auto w-full sm:w-fit">
+        <div className="flex gap-1 mb-4 sm:mb-6 rounded-lg border bg-muted/50 p-1 overflow-x-auto w-full">
           {[
             { id: "overview" as const, label: "Overview", icon: BarChart3 },
             { id: "documents" as const, label: "Documents", icon: FileText },
@@ -427,34 +429,34 @@ export default function DashboardPage() {
 
         {/* Overview Tab */}
         {activeTab === "overview" && (
-          <div className="grid gap-8 lg:grid-cols-3">
+          <div className="grid gap-4 sm:gap-8 lg:grid-cols-3">
             {/* Main Verification Card */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-2 space-y-4 sm:space-y-6">
               <Card className="animate-slide-up">
-                <CardHeader className="pb-4">
-                  <div className="flex items-center justify-between">
+                <CardHeader className="pb-3 sm:pb-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
                     <div>
-                      <CardTitle className="text-lg">AI Verification Summary</CardTitle>
-                      <CardDescription className="text-card-foreground/70">
+                      <CardTitle className="text-base sm:text-lg">AI Verification Summary</CardTitle>
+                      <CardDescription className="text-xs sm:text-sm text-card-foreground/70">
                         Comprehensive analysis of your scholarship application
                       </CardDescription>
                     </div>
-                    <div className="flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-100 to-indigo-100 dark:from-violet-900/30 dark:to-indigo-900/30 px-4 py-2">
-                      <Sparkles className="h-4 w-4 text-violet-600 dark:text-violet-400" />
-                      <span className="text-sm font-semibold text-violet-700 dark:text-violet-300">
+                    <div className="flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-100 to-indigo-100 dark:from-violet-900/30 dark:to-indigo-900/30 px-3 sm:px-4 py-1.5 sm:py-2 w-fit shrink-0">
+                      <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-violet-600 dark:text-violet-400" />
+                      <span className="text-xs sm:text-sm font-semibold text-violet-700 dark:text-violet-300">
                         Score: {averageConfidence}%
                       </span>
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-6">
+                <CardContent className="space-y-4 sm:space-y-6">
                   {/* Score Visualization */}
-                  <div className="relative">
+                  <div className="relative max-w-full">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-medium">Overall Verification Score</span>
                       <span className="text-sm text-foreground/70">{averageConfidence}%</span>
                     </div>
-                    <div className="relative h-4 rounded-full bg-secondary overflow-hidden">
+                    <div className="relative h-4 rounded-full bg-secondary overflow-hidden max-w-full">
                       <div
                         className="h-full rounded-full bg-gradient-to-r from-violet-500 via-indigo-500 to-emerald-500 transition-all duration-1000"
                         style={{ width: `${averageConfidence}%` }}
@@ -468,11 +470,11 @@ export default function DashboardPage() {
                   </div>
 
                   {/* Verification Checks - per document type */}
-                  <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2">
                     {documentResults.map((doc, index) => (
-                      <div key={doc.id} className="rounded-lg border p-4">
+                      <div key={doc.id} className="rounded-lg border p-3 sm:p-4">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium">{doc.label}</span>
+                          <span className="text-xs sm:text-sm font-medium truncate">{doc.label}</span>
                           <div className="flex items-center gap-1">
                             {doc.status === "verified" ? (
                               <CheckCircle2 className="h-4 w-4 text-emerald-500" />
@@ -502,18 +504,18 @@ export default function DashboardPage() {
 
               {/* Document List */}
               <Card>
-                <CardHeader className="pb-4">
-                  <CardTitle className="text-lg">Verified Documents</CardTitle>
-                  <CardDescription>
+                <CardHeader className="pb-3 sm:pb-4">
+                  <CardTitle className="text-base sm:text-lg">Verified Documents</CardTitle>
+                  <CardDescription className="text-xs sm:text-sm">
                     {verifiedCount} of {analyses.length} documents have been verified
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3">
                     {documentResults.map((doc, index) => (
                       <div
                         key={doc.id}
-                        className="flex items-center gap-4 rounded-lg border p-4 animate-slide-up"
+                        className="flex items-center gap-3 sm:gap-4 rounded-lg border p-3 sm:p-4 animate-slide-up"
                         style={{ animationDelay: `${index * 80}ms` }}
                       >
                         <div className={cn(
@@ -553,7 +555,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Sidebar */}
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {/* Application Status */}
               <Card className="animate-slide-up stagger-2">
                 <CardHeader className="pb-3">
@@ -567,10 +569,10 @@ export default function DashboardPage() {
                       : "bg-amber-50 dark:bg-amber-950/20"
                   )}>
                     <Award className={cn(
-                      "h-8 w-8",
+                      "h-8 w-8 shrink-0",
                       verifiedCount === analyses.length ? "text-emerald-500" : "text-amber-500"
                     )} />
-                    <div>
+                    <div className="min-w-0">
                       <p className={cn(
                         "font-medium text-sm",
                         verifiedCount === analyses.length
@@ -645,9 +647,7 @@ export default function DashboardPage() {
                 <div className="animate-slide-up stagger-4">
                   <EligibilityInsightsCard insights={eligibilityInsights} />
                 </div>
-              )}
-
-              {/* Top Recommended Scholarships */}
+              )}                  {/* Top Recommended Scholarships */}
               {matchingResults && (
                 <Card className="animate-slide-up">
                   <CardHeader className="pb-3">
@@ -655,17 +655,17 @@ export default function DashboardPage() {
                       <GraduationCap className="h-4 w-4 text-violet-600 dark:text-violet-400" />
                       <CardTitle className="text-base">Top Recommended Scholarships</CardTitle>
                     </div>
-                    <CardDescription>
+                    <CardDescription className="text-xs sm:text-sm">
                       Highest eligibility matches from {matchingResults.eligibleScholarships.length + matchingResults.partiallyEligible.length} available
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-3">
+                  <CardContent className="space-y-2 sm:space-y-3">
                     {[...matchingResults.eligibleScholarships, ...matchingResults.partiallyEligible]
                       .slice(0, 5)
                       .map((match, index) => (
                         <div
                           key={match.scholarship.id}
-                          className="flex items-center gap-3 rounded-lg border p-3 transition-all hover:shadow-sm"
+                          className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 rounded-lg border p-3 transition-all hover:shadow-sm"
                         >
                           <div className={cn(
                             "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-sm font-bold",
@@ -675,15 +675,15 @@ export default function DashboardPage() {
                           )}>
                             {match.eligibilityPercentage}%
                           </div>
-                          <div className="flex-1 min-w-0">
-                            <h4 className="text-sm font-medium truncate">{match.scholarship.name}</h4>
+                          <div className="flex-1 min-w-0 w-full">
+                            <h4 className="text-sm font-medium break-words">{match.scholarship.name}</h4>
                             <p className="text-xs text-muted-foreground">{match.scholarship.provider}</p>
                           </div>
                           <a
                             href={match.applyLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="shrink-0 rounded-lg bg-violet-50 px-3 py-1.5 text-xs font-medium text-violet-700 transition-colors hover:bg-violet-100 dark:bg-violet-900/30 dark:text-violet-300"
+                            className="w-full sm:w-auto shrink-0 rounded-lg bg-violet-50 px-3 py-1.5 text-xs font-medium text-violet-700 transition-colors hover:bg-violet-100 dark:bg-violet-900/30 dark:text-violet-300 text-center"
                           >
                             Apply
                           </a>
@@ -721,36 +721,36 @@ export default function DashboardPage() {
 
         {/* Documents Tab */}
         {activeTab === "documents" && (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">All Documents</CardTitle>
-                <CardDescription>
+              <CardHeader className="pb-3 sm:pb-4">
+                <CardTitle className="text-base sm:text-lg">All Documents</CardTitle>
+                <CardDescription className="text-xs sm:text-sm">
                   Detailed view of all uploaded and verified documents
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {documentResults.map((doc, index) => (
                     <div
                       key={doc.id}
-                      className="flex items-center gap-4 rounded-lg border p-4 animate-slide-up"
+                      className="flex items-center gap-3 sm:gap-4 rounded-lg border p-3 sm:p-4 animate-slide-up"
                       style={{ animationDelay: `${index * 80}ms` }}
                     >
                       <div className={cn(
-                        "flex h-12 w-12 shrink-0 items-center justify-center rounded-xl",
+                        "flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl",
                         doc.status === "verified" ? "bg-emerald-100 dark:bg-emerald-900/40" : "bg-amber-100 dark:bg-amber-900/40"
                       )}>
                         <FileText className={cn(
-                          "h-6 w-6",
+                          "h-5 w-5 sm:h-6 sm:w-6",
                           doc.status === "verified" ? "text-emerald-600 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400"
                         )} />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <h4 className="font-semibold">{doc.label}</h4>
+                          <h4 className="font-semibold text-sm sm:text-base truncate">{doc.label}</h4>
                           <span className={cn(
-                            "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
+                            "inline-flex items-center rounded-full px-2 sm:px-2.5 py-0.5 text-[10px] sm:text-xs font-medium shrink-0",
                             doc.status === "verified"
                               ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400"
                               : "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400"
@@ -758,7 +758,7 @@ export default function DashboardPage() {
                             {doc.confidence}% Match
                           </span>
                         </div>
-                        <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 mt-1 text-[11px] sm:text-xs text-muted-foreground">
                           <span>Verified: {doc.verifiedAt}</span>
                           {doc.issues.length > 0 && (
                             <span className="text-amber-600">Issue: {doc.issues[0]}</span>
@@ -766,7 +766,7 @@ export default function DashboardPage() {
                         </div>
                         {/* Show extracted fields if available */}
                         {doc.extraction && (
-                          <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-xs text-muted-foreground">
+                          <div className="flex flex-wrap gap-x-3 sm:gap-x-4 gap-y-1 mt-2 text-[11px] sm:text-xs text-muted-foreground">
                             {doc.extraction.name && <span>Name: {doc.extraction.name}</span>}
                             {doc.extraction.dob && <span>DOB: {doc.extraction.dob}</span>}
                             {doc.extraction.income && <span>Income: ₹{doc.extraction.income}</span>}
@@ -782,36 +782,34 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
           </div>
-        )}
-
-        {/* Scholarships Tab */}
+        )}          {/* Scholarships Tab */}
         {activeTab === "scholarships" && matchingResults && (
-          <div className="space-y-6 animate-fade-in">
+          <div className="space-y-4 sm:space-y-6 animate-fade-in">
             {/* Student Profile Summary */}
             <Card>
-              <CardHeader className="pb-4">
-                <div className="flex items-center justify-between">
+              <CardHeader className="pb-3 sm:pb-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 shadow-lg">
-                      <GraduationCap className="h-5 w-5 text-white" />
+                    <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 shadow-lg shrink-0">
+                      <GraduationCap className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                     </div>
                     <div>
-                      <CardTitle className="text-lg">Scholarship Recommendations</CardTitle>
-                      <CardDescription>
+                      <CardTitle className="text-base sm:text-lg">Scholarship Recommendations</CardTitle>
+                      <CardDescription className="text-xs sm:text-sm">
                         AI-matched scholarships based on your extracted documents
                       </CardDescription>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-100 to-indigo-100 dark:from-violet-900/30 dark:to-indigo-900/30 px-4 py-2">
-                    <Sparkles className="h-4 w-4 text-violet-600" />
-                    <span className="text-sm font-semibold text-violet-700 dark:text-violet-300">
+                  <div className="flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-100 to-indigo-100 dark:from-violet-900/30 dark:to-indigo-900/30 px-3 sm:px-4 py-1.5 sm:py-2 w-fit shrink-0">
+                    <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-violet-600" />
+                    <span className="text-xs sm:text-sm font-semibold text-violet-700 dark:text-violet-300">
                       {matchingResults.eligibleScholarships.length + matchingResults.partiallyEligible.length} matches
                     </span>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="grid gap-4 sm:grid-cols-3 mb-4">
+                <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-3 mb-4">
                   <div className="rounded-lg bg-emerald-50 dark:bg-emerald-950/20 p-4 text-center">
                     <TrendingUp className="h-6 w-6 text-emerald-500 mx-auto mb-1" />
                     <div className="text-2xl font-bold text-emerald-600">{matchingResults.eligibleScholarships.length}</div>
@@ -834,16 +832,16 @@ export default function DashboardPage() {
             {/* Highly Eligible */}
             {matchingResults.eligibleScholarships.length > 0 && (
               <Card>
-                <CardHeader className="pb-4">
+                <CardHeader className="pb-3 sm:pb-4">
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-                    <CardTitle className="text-lg">Highly Eligible Scholarships</CardTitle>
+                    <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-500 shrink-0" />
+                    <CardTitle className="text-base sm:text-lg">Highly Eligible Scholarships</CardTitle>
                   </div>
-                  <CardDescription>
+                  <CardDescription className="text-xs sm:text-sm">
                     You meet most or all criteria for these {matchingResults.eligibleScholarships.length} scholarships
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-3 sm:space-y-4">
                   {matchingResults.eligibleScholarships.map((match, index) => (
                     <ScholarshipMatchCard key={match.scholarship.id} match={match} index={index} profile={studentProfile} />
                   ))}
@@ -854,16 +852,16 @@ export default function DashboardPage() {
             {/* Partially Eligible */}
             {matchingResults.partiallyEligible.length > 0 && (
               <Card>
-                <CardHeader className="pb-4">
+                <CardHeader className="pb-3 sm:pb-4">
                   <div className="flex items-center gap-2">
-                    <AlertCircle className="h-5 w-5 text-amber-500" />
-                    <CardTitle className="text-lg">Partially Eligible Scholarships</CardTitle>
+                    <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 text-amber-500 shrink-0" />
+                    <CardTitle className="text-base sm:text-lg">Partially Eligible Scholarships</CardTitle>
                   </div>
-                  <CardDescription>
+                  <CardDescription className="text-xs sm:text-sm">
                     You partially meet criteria for these {matchingResults.partiallyEligible.length} scholarships
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-3 sm:space-y-4">
                   {matchingResults.partiallyEligible.map((match, index) => (
                     <ScholarshipMatchCard key={match.scholarship.id} match={match} index={index} profile={studentProfile} />
                   ))}
@@ -874,7 +872,7 @@ export default function DashboardPage() {
             {/* Not Eligible (collapsible) */}
             {matchingResults.notEligible.length > 0 && (
               <details className="group">
-                <summary className="cursor-pointer rounded-lg border p-4 text-sm font-medium text-muted-foreground hover:bg-muted/50 transition-colors">
+                <summary className="cursor-pointer rounded-lg border p-3 sm:p-4 text-sm font-medium text-muted-foreground hover:bg-muted/50 transition-colors">
                   <span className="flex items-center gap-2">
                     <span className="inline-flex items-center justify-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-400">
                       {matchingResults.notEligible.length}
@@ -882,7 +880,7 @@ export default function DashboardPage() {
                     Not Eligible Scholarships (click to expand)
                   </span>
                 </summary>
-                <div className="mt-4 space-y-4">
+                <div className="mt-3 sm:mt-4 space-y-3 sm:space-y-4">
                   {matchingResults.notEligible.map((match, index) => (
                     <ScholarshipMatchCard key={match.scholarship.id} match={match} index={index} profile={studentProfile} />
                   ))}
@@ -894,26 +892,26 @@ export default function DashboardPage() {
 
         {/* Report Tab */}
         {activeTab === "report" && (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <Card>
               <CardHeader className="pb-4">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
                   <div>
-                    <CardTitle className="text-lg">Detailed Verification Report</CardTitle>
-                    <CardDescription>
+                    <CardTitle className="text-base sm:text-lg">Detailed Verification Report</CardTitle>
+                    <CardDescription className="text-xs sm:text-sm">
                       AI-generated comprehensive report for Application #{appId}
                     </CardDescription>
                   </div>
-                  <Button variant="outline" size="sm" className="gap-2" onClick={() => window.print()}>
+                  <Button variant="outline" size="sm" className="gap-2 w-full sm:w-auto" onClick={() => window.print()}>
                     <Download className="h-4 w-4" />
                     Download Full Report
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-4 sm:space-y-6">
                 {/* Summary */}
-                <div className="rounded-lg bg-gradient-to-br from-violet-50 to-indigo-50 dark:from-violet-950/20 dark:to-indigo-950/20 p-6">
-                  <h3 className="font-semibold mb-2">Executive Summary</h3>
+                <div className="rounded-lg bg-gradient-to-br from-violet-50 to-indigo-50 dark:from-violet-950/20 dark:to-indigo-950/20 p-4 sm:p-6">
+                  <h3 className="font-semibold mb-2 text-sm sm:text-base">Executive Summary</h3>
                   <p className="text-sm text-foreground/80 leading-relaxed">
                     Your scholarship application package has been thoroughly analyzed by our AI system. 
                     {verifiedCount} of {analyses.length} required documents have been verified with an overall confidence score of {averageConfidence}%. 
@@ -946,21 +944,21 @@ export default function DashboardPage() {
                           </div>
                         </div>
                       </div>
-                      <div className="grid gap-4 sm:grid-cols-3">
+                      <div className="grid gap-3 sm:gap-4 grid-cols-3 sm:grid-cols-3">
                         <div>
-                          <p className="text-xs text-foreground/60">Quality Score</p>
+                          <p className="text-[10px] sm:text-xs text-foreground/60">Quality Score</p>
                           <p className={cn(
-                            "text-lg font-bold",
+                            "text-base sm:text-lg font-bold",
                             doc.status === "verified" ? "text-emerald-600" : "text-red-600"
                           )}>{doc.confidence}%</p>
                         </div>
                         <div>
-                          <p className="text-xs text-foreground/60">OCR Accuracy</p>
-                          <p className="text-lg font-bold text-violet-600">-</p>
+                          <p className="text-[10px] sm:text-xs text-foreground/60">OCR Accuracy</p>
+                          <p className="text-base sm:text-lg font-bold text-violet-600">-</p>
                         </div>
                         <div>
-                          <p className="text-xs text-foreground/60">Issues</p>
-                          <p className="text-lg font-bold">{doc.issues.length > 0 ? doc.issues.length : "None"}</p>
+                          <p className="text-[10px] sm:text-xs text-foreground/60">Issues</p>
+                          <p className="text-base sm:text-lg font-bold">{doc.issues.length > 0 ? doc.issues.length : "None"}</p>
                         </div>
                       </div>
                       {doc.issues.length > 0 && (
@@ -997,13 +995,12 @@ function ScholarshipMatchCard({ match, index, profile }: { match: MatchResult; i
 
   return (
     <div
-      className="rounded-lg border p-4 animate-slide-up transition-all hover:shadow-sm"
+      className="rounded-lg border p-3 sm:p-4 animate-slide-up transition-all hover:shadow-sm"
       style={{ animationDelay: `${index * 60}ms` }}
     >
-      <div className="flex items-start gap-4 flex-col sm:flex-row sm:justify-between">
-        <div className="flex-1 min-w-0 w-full sm:w-auto">
-          <div className="flex items-center gap-2 mb-1 flex-wrap">
-            <h4 className="font-semibold text-sm truncate">{match.scholarship.name}</h4>
+      <div className="flex items-start gap-3 sm:gap-4 flex-col sm:flex-row sm:justify-between">
+        <div className="flex-1 min-w-0 w-full">
+          <div className="flex items-center gap-2 mb-1 flex-wrap">                        <h4 className="font-semibold text-sm break-words">{match.scholarship.name}</h4>
             <span
               className={cn(
                 "inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium shrink-0",
@@ -1073,7 +1070,7 @@ function ScholarshipMatchCard({ match, index, profile }: { match: MatchResult; i
           href={match.applyLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="shrink-0 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 px-4 py-2 text-xs font-medium text-white shadow transition-all hover:shadow-md hover:from-violet-700 hover:to-indigo-700 text-center sm:w-auto"
+          className="w-full sm:w-auto shrink-0 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 px-4 py-2.5 sm:py-2 text-xs font-medium text-white shadow transition-all hover:shadow-md hover:from-violet-700 hover:to-indigo-700 text-center"
         >
           Apply
         </a>

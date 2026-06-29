@@ -12,24 +12,24 @@ interface EligibilityInsightsProps {
 export function EligibilityInsights({ insights }: EligibilityInsightsProps) {
   return (
     <Card>
-      <CardHeader className="pb-4">
+      <CardHeader className="pb-3 sm:pb-4">
         <div className="flex items-center gap-2">
-          <Target className="h-5 w-5 text-violet-600 dark:text-violet-400" />
-          <CardTitle className="text-lg">Eligibility Insights</CardTitle>
+          <Target className="h-5 w-5 text-violet-600 dark:text-violet-400 shrink-0" />
+          <CardTitle className="text-base sm:text-lg">Eligibility Insights</CardTitle>
         </div>
-        <CardDescription>
+        <CardDescription className="text-xs sm:text-sm">
           Your eligibility patterns across {insights.fullyEligibleCount + insights.partiallyEligibleCount} matching scholarships
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-5">
+      <CardContent className="space-y-4 sm:space-y-5">
         {/* Average Score */}
-        <div className="flex items-center gap-3 rounded-lg bg-gradient-to-br from-violet-50 to-indigo-50 dark:from-violet-950/20 dark:to-indigo-950/20 p-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 shadow-lg shadow-violet-500/20">
-            <Target className="h-6 w-6 text-white" />
+        <div className="flex items-center gap-3 rounded-lg bg-gradient-to-br from-violet-50 to-indigo-50 dark:from-violet-950/20 dark:to-indigo-950/20 p-3 sm:p-4">
+          <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 shadow-lg shadow-violet-500/20 shrink-0">
+            <Target className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
           </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Average Eligibility Score</p>
-            <p className="text-2xl font-bold text-violet-600 dark:text-violet-400">{insights.averageScore}%</p>
+          <div className="min-w-0">
+            <p className="text-xs sm:text-sm text-muted-foreground">Average Eligibility Score</p>
+            <p className="text-xl sm:text-2xl font-bold text-violet-600 dark:text-violet-400">{insights.averageScore}%</p>
           </div>
         </div>
 

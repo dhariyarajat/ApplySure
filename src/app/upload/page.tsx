@@ -224,28 +224,28 @@ export default function UploadPage() {
   if (path === "choosing") {
     return (
       <div className="min-h-screen bg-gradient-to-br from-violet-50/50 via-white to-indigo-50/50 dark:from-violet-950/20 dark:via-background dark:to-indigo-950/20">
-        <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-4xl px-4 py-10 sm:py-16 sm:px-6 lg:px-8">
           {/* Header */}
-          <div className="text-center mb-12 animate-fade-in">
+          <div className="text-center mb-8 sm:mb-12 animate-fade-in">
             <div className="inline-flex rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 p-4 shadow-xl shadow-violet-500/25 mb-6">
               <Upload className="h-10 w-10 text-white" />
             </div>
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight sm:text-5xl">
               Start Your{" "}
               <span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
                 Scholarship Application
               </span>
             </h1>
-            <p className="mt-4 text-lg text-foreground/70 max-w-2xl mx-auto">
+            <p className="mt-3 sm:mt-4 text-base sm:text-lg text-foreground/70 max-w-2xl mx-auto">
               Choose how you'd like to get started. Upload your documents for AI-powered extraction, or enter your details manually.
             </p>
           </div>
 
           {/* Two Option Cards */}
-          <div className="grid gap-8 md:grid-cols-2">
+          <div className="grid gap-4 sm:gap-8 md:grid-cols-2">
             {/* Card 1: Upload Documents */}
             <div
-              className="group relative rounded-2xl border-2 border-violet-200/50 bg-card p-8 transition-all duration-300 hover:shadow-xl hover:border-violet-300 hover:-translate-y-1 cursor-pointer animate-slide-up"
+              className="group relative rounded-2xl border-2 border-violet-200/50 bg-card p-6 sm:p-8 transition-all duration-300 hover:shadow-xl hover:border-violet-300 hover:-translate-y-1 cursor-pointer animate-slide-up"
               onClick={() => {
                 // Clear old data when starting a new upload flow
                 localStorage.removeItem("applysure_analyses")
@@ -262,8 +262,8 @@ export default function UploadPage() {
               <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-100 to-indigo-100 dark:from-violet-900/30 dark:to-indigo-900/30 shadow-inner group-hover:scale-110 transition-transform">
                 <Upload className="h-8 w-8 text-violet-600 dark:text-violet-400" />
               </div>
-              <h2 className="text-2xl font-bold mb-3">Upload Documents</h2>
-              <p className="text-card-foreground/80 mb-6 leading-relaxed">
+              <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Upload Documents</h2>
+              <p className="text-sm sm:text-base text-card-foreground/80 mb-4 sm:mb-6 leading-relaxed">
                 Upload Aadhaar, Income Certificate, Marksheet and other documents. AI will automatically extract your information and match you with eligible scholarships.
               </p>
               <ul className="space-y-2 mb-6 text-sm text-card-foreground/80">
@@ -280,7 +280,7 @@ export default function UploadPage() {
                   Smart scholarship matching
                 </li>
               </ul>
-              <div className="inline-flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-6 text-sm font-semibold text-white shadow-lg shadow-violet-500/25 transition-all group-hover:shadow-xl group-hover:shadow-violet-500/30 group-hover:scale-105">
+              <div className="inline-flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-4 sm:px-6 text-sm font-semibold text-white shadow-lg shadow-violet-500/25 transition-all group-hover:shadow-xl group-hover:shadow-violet-500/30 group-hover:scale-105 w-full sm:w-auto">
                 <Upload className="h-4 w-4 mr-2" />
                 Upload Documents
               </div>
@@ -288,7 +288,7 @@ export default function UploadPage() {
 
             {/* Card 2: Fill Details Manually */}
             <div
-              className="group relative rounded-2xl border-2 border-indigo-200/50 bg-card p-8 transition-all duration-300 hover:shadow-xl hover:border-indigo-300 hover:-translate-y-1 cursor-pointer animate-slide-up"
+              className="group relative rounded-2xl border-2 border-indigo-200/50 bg-card p-6 sm:p-8 transition-all duration-300 hover:shadow-xl hover:border-indigo-300 hover:-translate-y-1 cursor-pointer animate-slide-up"
               onClick={() => {
                 // Clear old data when starting a new manual entry
                 localStorage.removeItem("applysure_analyses")
@@ -305,8 +305,8 @@ export default function UploadPage() {
               <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-100 to-violet-100 dark:from-indigo-900/30 dark:to-violet-900/30 shadow-inner group-hover:scale-110 transition-transform">
                 <FileText className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
               </div>
-              <h2 className="text-2xl font-bold mb-3">Fill Details Manually</h2>
-              <p className="text-card-foreground/80 mb-6 leading-relaxed">
+              <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Fill Details Manually</h2>
+              <p className="text-sm sm:text-base text-card-foreground/80 mb-4 sm:mb-6 leading-relaxed">
                 Don&apos;t want to upload documents? Enter your academic and personal details manually and get matched with relevant scholarships instantly.
               </p>
               <ul className="space-y-2 mb-6 text-sm text-card-foreground/80">
@@ -323,7 +323,7 @@ export default function UploadPage() {
                   Instant eligibility check
                 </li>
               </ul>
-              <div className="inline-flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-6 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all group-hover:shadow-xl group-hover:shadow-indigo-500/30 group-hover:scale-105">
+              <div className="inline-flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-4 sm:px-6 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all group-hover:shadow-xl group-hover:shadow-indigo-500/30 group-hover:scale-105 w-full sm:w-auto">
                 <FileText className="h-4 w-4 mr-2" />
                 Enter Details
               </div>
@@ -331,7 +331,7 @@ export default function UploadPage() {
           </div>
 
           {/* Back link */}
-          <div className="text-center mt-12 animate-fade-in" style={{ animationDelay: "0.3s" }}>
+          <div className="text-center mt-8 sm:mt-12 animate-fade-in" style={{ animationDelay: "0.3s" }}>
             <a href="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               ← Back to home
             </a>
@@ -342,10 +342,9 @@ export default function UploadPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50/50 via-white to-indigo-50/50 dark:from-violet-950/20 dark:via-background dark:to-indigo-950/20">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-violet-50/50 via-white to-indigo-50/50 dark:from-violet-950/20 dark:via-background dark:to-indigo-950/20">        <div className="mx-auto max-w-7xl px-4 py-4 sm:py-8 sm:px-6 lg:px-8">
         {/* Back to options */}
-        <div className="mb-4">
+        <div className="mb-3 sm:mb-4">
           <button
             onClick={() => setPath("choosing")}
             className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -355,23 +354,23 @@ export default function UploadPage() {
         </div>
 
         {/* Page Header */}
-        <div className="mb-8 animate-fade-in">
+        <div className="mb-5 sm:mb-8 animate-fade-in">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 shadow-lg shadow-violet-500/25">
-              <Upload className="h-6 w-6 text-white" />
+            <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 shadow-lg shadow-violet-500/25 shrink-0">
+              <Upload className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
             </div>
-            <div>
-              <h1 className="text-3xl font-bold tracking-tight">Upload Documents</h1>
-              <p className="text-foreground/70 mt-1">
+            <div className="min-w-0">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Upload Documents</h1>
+              <p className="text-sm sm:text-base text-foreground/70 mt-0.5 sm:mt-1">
                 Upload all required documents to build your scholarship package
               </p>
             </div>
           </div>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-3">
+        <div className="grid gap-6 sm:gap-8 lg:grid-cols-3">
           {/* Main Upload Area - each doc has its own section */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
             {/* Progress Summary Banner */}
             <Card className="animate-slide-up bg-gradient-to-r from-violet-50 to-indigo-50 dark:from-violet-950/20 dark:to-indigo-950/20 border-violet-200/50 dark:border-violet-800/50">
               <CardContent className="p-4">
@@ -517,11 +516,10 @@ export default function UploadPage() {
                       )}
 
                       {/* State: No file uploaded - show upload area */}
-                      {state === "idle" && !file && (
-                        <div
-                          onClick={() => triggerFileInput(doc.id)}
-                          className="group cursor-pointer rounded-xl border-2 border-dashed border-muted-foreground/25 p-4 sm:p-8 text-center transition-all duration-300 hover:border-violet-300 hover:bg-violet-50/50 dark:hover:bg-violet-950/20"
-                        >
+                      {state === "idle" && !file && (                          <div
+                            onClick={() => triggerFileInput(doc.id)}
+                            className="group cursor-pointer rounded-xl border-2 border-dashed border-muted-foreground/25 p-4 sm:p-8 text-center transition-all duration-300 hover:border-violet-300 hover:bg-violet-50/50 dark:hover:bg-violet-950/20"
+                          >
                           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-muted transition-all duration-300 group-hover:bg-violet-100 dark:group-hover:bg-violet-900/40">
                             <Upload className="h-7 w-7 text-muted-foreground group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors" />
                           </div>
@@ -613,8 +611,8 @@ export default function UploadPage() {
           </div>
 
           {/* Sidebar - Scholarship Package */}
-          <div className="space-y-6">
-            <div className="lg:sticky lg:top-24 space-y-6">
+          <div className="space-y-4 sm:space-y-6">
+            <div className="lg:sticky lg:top-24 space-y-4 sm:space-y-6">
               {/* Package Progress */}
               <ScholarshipPackage documents={documents} />
 
@@ -666,7 +664,7 @@ export default function UploadPage() {
               )}
 
               {/* Action Button */}
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {allUploaded && !allValidated && (
                   <div className="rounded-lg border bg-red-50/50 dark:bg-red-950/20 p-4">
                     <div className="flex items-start gap-3">

@@ -68,12 +68,13 @@ export function ImagePreview({ file, analysisResult, onRemove, className }: Imag
 
   return (
     <div className={cn("space-y-3 animate-slide-up", className)}>
-      {/* Preview Controls */}                  <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-sm">
-          <span className="font-medium">
+      {/* Preview Controls */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-0">
+        <div className="flex items-center gap-1.5 text-xs sm:text-sm min-w-0">
+          <span className="font-medium truncate max-w-[120px] sm:max-w-none">
   {file && "name" in file ? file.name : "Uploaded image"}
 </span>
-          <span className="text-muted-foreground">({file && "size" in file ? formatFileSize(file.size) : ""})</span>
+          <span className="text-muted-foreground shrink-0">({file && "size" in file ? formatFileSize(file.size) : ""})</span>
           {dimensions.width > 0 && (
             <span className="text-muted-foreground hidden sm:inline">
               {dimensions.width}×{dimensions.height}
@@ -122,7 +123,7 @@ export function ImagePreview({ file, analysisResult, onRemove, className }: Imag
         ref={containerRef}
         className={cn(
           "relative overflow-hidden rounded-xl border bg-muted/30",
-          isFullscreen ? "fixed inset-4 z-50 bg-background shadow-2xl" : "h-64 sm:h-80"
+          isFullscreen ? "fixed inset-4 z-50 bg-background shadow-2xl" : "h-48 sm:h-64 sm:h-80"
         )}
       >
         {/* Fullscreen toggle */}
@@ -187,14 +188,14 @@ export function ImagePreview({ file, analysisResult, onRemove, className }: Imag
 
       {/* Image Info Bar */}
       {analysisResult && (
-        <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-[10px] sm:text-xs text-muted-foreground">
           <span className="flex items-center gap-1">
             <Brain className="h-3 w-3" />
             AI Analysis
           </span>
-          <span>Document: {analysisResult.classification.documentType.replace(/_/g, " ")}</span>
+          <span className="truncate max-w-[100px] sm:max-w-none">Document: {analysisResult.classification.documentType.replace(/_/g, " ")}</span>
           <span>Confidence: {confidence}%</span>
-          <span>Processing: {(analysisResult.processingTimeMs / 1000).toFixed(1)}s</span>
+          <span className="hidden sm:inline">Processing: {(analysisResult.processingTimeMs / 1000).toFixed(1)}s</span>
           {analysisResult.extraction?.rawText && (
             <span className="hidden sm:inline">
               Text chars: {analysisResult.extraction.rawText.length}

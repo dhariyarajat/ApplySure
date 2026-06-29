@@ -82,37 +82,35 @@ export default function EligibilityPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-50/50 via-white to-indigo-50/50 dark:from-violet-950/20 dark:via-background dark:to-indigo-950/20">
-      <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-4xl px-4 py-10 sm:py-16 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-12 animate-fade-in">
-          <div className="inline-flex rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 p-4 shadow-xl shadow-violet-500/25 mb-6">
-            <GraduationCap className="h-10 w-10 text-white" />
+        <div className="text-center mb-8 sm:mb-12 animate-fade-in">
+          <div className="inline-flex rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 p-3 sm:p-4 shadow-xl shadow-violet-500/25 mb-4 sm:mb-6">
+            <GraduationCap className="h-8 w-8 sm:h-10 sm:w-10 text-white" />
           </div>
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight sm:text-5xl">
             Check Your{" "}
             <span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
               Scholarship Eligibility
             </span>
           </h1>
-          <p className="mt-4 text-lg text-foreground/70 max-w-2xl mx-auto">
+          <p className="mt-3 sm:mt-4 text-base sm:text-lg text-foreground/70 max-w-2xl mx-auto">
             Choose how you'd like to check your eligibility for scholarships
           </p>
-         
         </div>
 
         {/* Two Option Cards */}
-        <div className="grid gap-8 md:grid-cols-2">
-          {/* Card 1: Check My Eligibility */}
-          <div
-            className="group relative rounded-2xl border-2 border-violet-200/50 bg-card p-8 transition-all duration-300 hover:shadow-xl hover:border-violet-300 hover:-translate-y-1 cursor-pointer animate-slide-up"
-            style={{ animationDelay: "0.1s" }}
-          >
+        <div className="grid gap-4 sm:gap-8 md:grid-cols-2">
+          {/* Card 1: Check My Eligibility */}            <div
+              className="group relative rounded-2xl border-2 border-violet-200/50 bg-card p-6 sm:p-8 transition-all duration-300 hover:shadow-xl hover:border-violet-300 hover:-translate-y-1 cursor-pointer animate-slide-up"
+              style={{ animationDelay: "0.1s" }}
+            >
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-violet-500 to-indigo-500 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-100 to-indigo-100 dark:from-violet-900/30 dark:to-indigo-900/30 shadow-inner group-hover:scale-110 transition-transform">
               <User className="h-8 w-8 text-violet-600 dark:text-violet-400" />
             </div>
-            <h2 className="text-2xl font-bold mb-3">Check My Eligibility</h2>
-            <p className="text-card-foreground/80 mb-6 leading-relaxed">
+            <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Check My Eligibility</h2>
+            <p className="text-sm sm:text-base text-card-foreground/80 mb-4 sm:mb-6 leading-relaxed">
               Use your saved profile information to instantly check scholarship eligibility. No manual entry required.
             </p>
             <div className="space-y-3 mb-6">
@@ -148,17 +146,16 @@ export default function EligibilityPage() {
             </Button>
           </div>
 
-          {/* Card 2: Check Eligibility For Someone Else */}
-          <div
-            className="group relative rounded-2xl border-2 border-indigo-200/50 bg-card p-8 transition-all duration-300 hover:shadow-xl hover:border-indigo-300 hover:-translate-y-1 cursor-pointer animate-slide-up"
-            style={{ animationDelay: "0.2s" }}
-          >
+          {/* Card 2: Check Eligibility For Someone Else */}            <div
+              className="group relative rounded-2xl border-2 border-indigo-200/50 bg-card p-6 sm:p-8 transition-all duration-300 hover:shadow-xl hover:border-indigo-300 hover:-translate-y-1 cursor-pointer animate-slide-up"
+              style={{ animationDelay: "0.2s" }}
+            >
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-indigo-500 to-violet-500 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-100 to-violet-100 dark:from-indigo-900/30 dark:to-indigo-900/30 shadow-inner group-hover:scale-110 transition-transform">
               <FileText className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
             </div>
-            <h2 className="text-2xl font-bold mb-3">Check Eligibility For Someone Else</h2>
-            <p className="text-card-foreground/80 mb-6 leading-relaxed">
+            <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Check Eligibility For Someone Else</h2>
+            <p className="text-sm sm:text-base text-card-foreground/80 mb-4 sm:mb-6 leading-relaxed">
               Enter details manually for a friend, family member, or temporary eligibility check without using saved profile.
             </p>
             <ul className="space-y-2 mb-6 text-sm text-card-foreground/80">
@@ -190,7 +187,7 @@ export default function EligibilityPage() {
         </div>
 
         {/* Profile actions */}
-        <div className="mt-12 flex items-center justify-center gap-4 animate-fade-in" style={{ animationDelay: "0.3s" }}>
+        <div className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 animate-fade-in" style={{ animationDelay: "0.3s" }}>
           <Button
             variant="outline"
             size="sm"
